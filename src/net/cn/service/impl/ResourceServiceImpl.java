@@ -15,6 +15,7 @@ import net.cn.service.ResourceService;
 
 
 @Service("resourceService")
+@SuppressWarnings("all")
 public class ResourceServiceImpl implements ResourceService{
 	@javax.annotation.Resource
 	private BaseDao baseDao;

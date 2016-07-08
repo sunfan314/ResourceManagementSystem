@@ -15,6 +15,7 @@ import net.cn.util.ApplicationFlowConfig;
 import net.cn.util.UserGroupConfig;
 
 @Service("flowService")
+@SuppressWarnings("all")
 public class FlowServiceImpl implements FlowService{
 	@Resource
 	private BaseDao baseDao;

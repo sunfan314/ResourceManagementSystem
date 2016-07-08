@@ -1,20 +1,16 @@
 package net.cn.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import net.cn.util.TimeUtil;
 
@@ -66,6 +62,9 @@ public class Application {
 	
 	@Transient
 	private Resource resource;
+	
+	@Transient
+	private String resourceName;
 	
 	public Application(){
 		super();
@@ -187,6 +186,14 @@ public class Application {
 
 	public void setResource(Resource resource) {
 		this.resource = resource;
+	}
+
+	public String getResourceName() {
+		return resourceName;
+	}
+
+	public void setResourceName(String resourceName) {
+		this.resourceName = resourceName;
 	}
 	
 

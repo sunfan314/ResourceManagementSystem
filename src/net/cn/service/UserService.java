@@ -1,13 +1,9 @@
 package net.cn.service;
 
 import java.util.List;
-
 import net.cn.model.Application;
-import net.cn.model.Log;
 import net.cn.model.Property;
-import net.cn.model.PurchaseApplication;
-import net.cn.model.Resource;
-import net.cn.model.Type;
+
 
 public interface UserService {
 	
@@ -60,6 +56,12 @@ public interface UserService {
 	public boolean createResourceReturnApplication(int rid,String uid,String remark);
 	
 	/**
+	 * @param applicationId
+	 * @return	获取申请的详细信息
+	 */
+	public Application getApplicationInfo(int applicationId);
+	
+	/**
 	 * @param uid
 	 * @return	获得用户发起的资产分配申请（包含已处理和未处理的）
 	 */
@@ -75,7 +77,7 @@ public interface UserService {
 	 * @param uid
 	 * @return	获得用户发起的资产归还申请（包含已处理和未处理的）
 	 */
-	public List<Application> getResourceRetrunApplications(String uid);
+	public List<Application> getResourceReturnApplications(String uid);
 	
 	/**
 	 * @param uid

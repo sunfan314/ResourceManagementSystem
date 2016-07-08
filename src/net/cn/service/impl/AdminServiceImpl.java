@@ -10,6 +10,7 @@ import net.cn.model.Resource;
 import net.cn.service.AdminService;
 
 @Service("adminService")
+@SuppressWarnings("all")
 public class AdminServiceImpl implements AdminService {
 
 	@Override

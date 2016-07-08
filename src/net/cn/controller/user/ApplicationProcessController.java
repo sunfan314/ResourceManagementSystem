@@ -1,13 +1,16 @@
 package net.cn.controller.user;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,7 +30,8 @@ public class ApplicationProcessController {
 	@RequestMapping("/userApplicationProcess")
 	public ModelAndView userApplicationProcess(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("uid", session.getAttribute("uid"));
+		String uid = (String) session.getAttribute("uid");
+		modelAndView.addObject("uid", uid);
 		modelAndView.setViewName("user/userApplicationProcess");
 		return modelAndView;
 	}
@@ -43,8 +47,53 @@ public class ApplicationProcessController {
 		List<Application> list = new ArrayList<>();
 		list.addAll(userService.getResourceApplyApplications(uid));
 		list.addAll(userService.getResourceTransferApplications(uid));
-		list.addAll(userService.getResourceRetrunApplications(uid));
+		list.addAll(userService.getResourceReturnApplications(uid));
 		return list;
+	}
+	
+	/**
+	 * @param session
+	 * @return	获得用户发起的资产分配申请
+	 */
+	@RequestMapping("/getUserResourceApplyApplications")
+	public @ResponseBody List<Application> getUserResourceApplyApplications(HttpSession session){
+		String uid=(String)session.getAttribute("uid");
+		List<Application> applications=userService.getResourceApplyApplications(uid);
+		return applications;
+	}
+	
+	/**
+	 * @param session
+	 * @return	获得用户发起的资产转移申请
+	 */
+	@RequestMapping("/getUserResourceTransferApplications")
+	public @ResponseBody List<Application> getUserResourceTransferApplications(HttpSession session){
+		String uid=(String)session.getAttribute("uid");
+		List<Application> applications=userService.getResourceTransferApplications(uid);
+		return applications;
+	}
+	
+	/**
+	 * @param session
+	 * @return	获得用户发起的资产归还申请
+	 */
+	@RequestMapping("/getUserResourceReturnApplications")
+	public @ResponseBody List<Application> getUserResourceReturnApplications(HttpSession session){
+		String uid=(String)session.getAttribute("uid");
+		List<Application> applications=userService.getResourceReturnApplications(uid);
+		return applications;
+	}
+	
+	/**
+	 * @param applicationId
+	 * @return	获得申请的详细信息
+	 */
+	@RequestMapping("/getApplicationDetailInfo")
+	public @ResponseBody Map<String,Object> getApplicationDetailInfo(@RequestParam(value="aId",required=true)int applicationId){
+		Map<String,Object> map=new HashMap<String,Object>();
+		Application application=userService.getApplicationInfo(applicationId);
+		map.put("application", application);
+		return map;
 	}
 
 }

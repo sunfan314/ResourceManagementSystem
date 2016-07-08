@@ -24,6 +24,7 @@ import net.cn.util.TimeUtil;
 import net.cn.util.UserGroupConfig;
 
 @Service("userService")
+@SuppressWarnings("all")
 public class UserServiceImpl implements UserService {
 	@javax.annotation.Resource
 	private ResourceService resourceService;
@@ -164,6 +165,17 @@ public class UserServiceImpl implements UserService {
 	
 	
 	@Override
+	public Application getApplicationInfo(int applicationId) {
+		// TODO Auto-generated method stub
+		Application application=(Application)baseDao.get(Application.class, applicationId);
+		Resource resource=(Resource)baseDao.get(Resource.class, application.getRid());
+		Type type=(Type)baseDao.get(Type.class, resource.getType());
+		resource.setTypeName(type.getName());
+		application.setResource(resource);
+		return application;
+	}
+
+	@Override
 	public List<Application> getResourceApplyApplications(String uid) {
 		// TODO Auto-generated method stub
 		List<Object> params=new ArrayList<>();
@@ -184,7 +196,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Application> getResourceRetrunApplications(String uid) {
+	public List<Application> getResourceReturnApplications(String uid) {
 		// TODO Auto-generated method stub
 		List<Object> params=new ArrayList<>();
 		params.add(ApplicationTypeConfig.RETURN_RESOURCE);
@@ -268,9 +280,7 @@ public class UserServiceImpl implements UserService {
 	private List<Application> setApplicationResource(List<Application> list){
 		for (Application application : list) {
 			Resource resource=(Resource)baseDao.get(Resource.class, application.getRid());
-			Type type=(Type)baseDao.get(Type.class, resource.getType());
-			resource.setTypeName(type.getName());
-			application.setResource(resource);
+			application.setResourceName(resource.getName());
 		}
 		return list;
 	}

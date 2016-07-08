@@ -67,7 +67,6 @@
 				textField:'text',
 				panelHeight:'auto'"></td>
 				</tr>
-
 				<tr>
 					<td>备注信息：（可不填）</td>
 				</tr>

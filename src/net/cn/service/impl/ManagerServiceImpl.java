@@ -9,6 +9,7 @@ import net.cn.model.PurchaseApplication;
 import net.cn.service.ManagerService;
 
 @Service("managerService")
+@SuppressWarnings("all")
 public class ManagerServiceImpl implements ManagerService{
 
 	@Override
