@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
 		if (resourceService.isResourceAvailable(rid)) {
 			Application application = new Application(rid, "warehouse", uid, remark,
 					ApplicationTypeConfig.APPLY_RESOURCE);
-			Flow flow = (Flow)baseDao.get(Flow.class, ApplicationFlowConfig.MANAGER_AMDIN_FLOW);
+			Flow flow = (Flow)baseDao.get(Flow.class, ApplicationFlowConfig.MANAGER_ADMIN_FLOW);
 			application.setFlow(flow);
 			baseDao.save(application);
 			return true;
@@ -280,6 +280,9 @@ public class UserServiceImpl implements UserService {
 	private List<Application> setApplicationResource(List<Application> list){
 		for (Application application : list) {
 			Resource resource=(Resource)baseDao.get(Resource.class, application.getRid());
+			Type type=(Type)baseDao.get(Type.class, resource.getType());
+			resource.setTypeName(type.getName());
+			application.setResource(resource);
 			application.setResourceName(resource.getName());
 		}
 		return list;

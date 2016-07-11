@@ -15,30 +15,49 @@ public interface AdminService {
 	public void addNewResource(Resource resource);
 	
 	/**
+	 * @return	获取资产分配申请列表
+	 */
+	public List<Application> getResourceAllocationApplications();
+	
+	/**
 	 * @return	获取资产回收申请列表
 	 */
 	public List<Application> getResourceCallbackApplications();
 	
 	/**
-	 * @param rid
-	 * @return	回收资产
+	 * @return	获取资产购买申请列表
 	 */
-	public boolean returnResource(int rid);
+	public List<Application> getResourcePurchaseApplications();
+	
 	
 	/**
-	 * @return	获取资产分配批准列表
+	 * @param applicationId
+	 * @param uid
+	 * @return	批准资产分配申请
 	 */
-	public List<Application> getApplicationApprovals();
+	public boolean agreeResourceAllocationApplication(int applicationId,String uid);
 	
 	/**
-	 * @param application
-	 * @return	分配在库资产
+	 * 拒绝资产分配申请
+	 * @param applicationId
+	 * @param uid
+	 * @param remark
 	 */
-	public boolean allocateResource(Application application);
+	public void refuseResourceAllocationApplication(int applicationId,String uid,String remark);
 	
 	/**
-	 * @return	获取资产购买批准列表
+	 * @param applicationId
+	 * @param uid
+	 * @return	资产回收入库
 	 */
-	public List<PurchaseApplication> getPurchaseApprovals();
+	public boolean agreeResourceCallbackApplication(int applicationId,String uid);
+	
+	/**
+	 * 拒绝资产回收入库请求
+	 * @param applicationId
+	 * @param uid
+	 * @param remark
+	 */
+	public void refuseResourceCallbackApplication(int applicationId,String uid,String remark);
 
 }

@@ -17,11 +17,13 @@ public interface ManagerService {
 	 */
 	public List<PurchaseApplication> getResourcePurchaseApplications();
 	
+	
 	/**
-	 * @param application
-	 * 批准资产分配申请
+	 * @param applicationId
+	 * @param uid
+	 * @return	经理批准资产分配申请
 	 */
-	public void agreeResourceAllocationApplication(Application application);
+	public void agreeResourceAllocationApplication(int applicationId,String uid);
 	
 	/**
 	 * @param request
@@ -29,11 +31,13 @@ public interface ManagerService {
 	 */
 	public void agreeResourcePurchaseApplication(PurchaseApplication application);
 	
+	
 	/**
-	 * @param application
-	 * 拒绝资产分配申请
+	 * @param applicationId
+	 * @param uid
+	 * @param remark
 	 */
-	public void refuseResourceAllocationApplication(Application application);
+	public void refuseResourceAllocationApplication(int applicationId,String uid,String remark);
 	
 	/**
 	 * @param request

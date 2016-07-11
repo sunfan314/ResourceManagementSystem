@@ -42,6 +42,12 @@ th.thStyle {
 	width: 200px;
 }
 
+th.thStyle2 {
+	text-align: left;
+	padding: 4px;
+	width: 50px;
+}
+
 td.tdStyle {
 	padding-left: 10px;
 	border-width: 2px;
@@ -79,7 +85,7 @@ td.tdStyle {
 
 	<div data-options="region:'east'" style="width: 35%" title="申请详情">
 		<div id="applicationDiv"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+			style="margin-left:-10px;margin-right: 40px; margin-top: 40px;display:none;">
 			<table id="applicationDetailInfo" class="tableStyle">
 				<tr>
 					<th class="thStyle">申请提交时间</th>
@@ -161,13 +167,13 @@ td.tdStyle {
 	</div>
 
 	<div id="toolbar">
-		<a href="#" class="easyui-linkbutton" plain="true"
-			onclick="applyResourceApplications()">在库资产申请</a> <a href="#"
+		<a id="button1" href="#" class="easyui-linkbutton" plain="true"
+			onclick="applyResourceApplications()">资产分配申请</a> <a id="button2" href="#"
 			class="easyui-linkbutton" plain="true"
-			onclick="transferResourceApplications()">资产转移申请</a> <a href="#"
+			onclick="transferResourceApplications()">资产转移申请</a> <a id="button3" href="#"
 			class="easyui-linkbutton" plain="true"
-			onclick="returnResourceApplications()">资产归还申请</a><a href="#"
-			class="easyui-linkbutton" plain="true" onclick="allApplications()">查看所有申请</a>
+			onclick="returnResourceApplications()">资产归还申请</a><a id="button4" href="#"
+			class="easyui-linkbutton" plain="true" onclick="allApplications()" data-options="selected:true">查看所有申请</a>
 	</div>
 
 	<script type="text/javascript">
@@ -204,21 +210,101 @@ td.tdStyle {
 						var receiverApprovalTd=document.getElementById("receiverApproval");
 											
 						timeTd.innerHTML=a.time;
+						//申请审核列表
+						var approvals=a.approvals;
+						var managerApproval=0;
+						var adminApproval=0;
+						var receiverApproval=0;
+						for(var i=0;i<approvals.length;i++){
+							var temp=approvals[i];
+							if(a.type==0){
+								if(temp.step==1){
+									managerApproval=temp;
+								}else if(temp.step==2){
+									adminApproval=temp;
+								}
+							}else if(a.type==1){
+								if(temp.step==1){
+									receiverApproval=temp;
+								}
+							}else if(a.type==2){
+								if(temp.step==1){
+									adminApproval=temp;
+								}
+							}
+						}
 						if(a.type==0){
 							typeTd.innerHTML="在库资产分配";
 							managerTr.style.display="";
 							adminTr.style.display="";
 							receiverTr.style.display="none";
+							if(managerApproval!=0){//经理已经审核
+								var approvalResult;
+								if(managerApproval.approve==0){
+									approvalResult="审核通过"
+								}else{
+									approvalResult="审核拒绝";
+								}
+								managerApprovalTd.innerHTML="<table><tr><th class=\"thStyle2\">审核结果</th><td>"+approvalResult+
+								"</td></tr><tr><th class=\"thStyle2\">审核人</th><td>"+managerApproval.reviewer+
+								"</td></tr><tr><th class=\"thStyle2\">审核时间</th><td>"+managerApproval.time+
+								"</td></tr><tr><th class=\"thStyle2\">备注信息</th><td>"+managerApproval.remark+"</td></tr><table>";
+							}else{
+								managerApprovalTd.innerHTML="经理尚未审核";
+							}
+							if(adminApproval!=0){//管理员已经审核
+								var approvalResult;
+								if(adminApproval.approve==0){
+									approvalResult="审核通过"
+								}else{
+									approvalResult="审核拒绝";
+								}
+								adminApprovalTd.innerHTML="<table><tr><th class=\"thStyle2\">审核结果</th><td>"+approvalResult+
+								"</td></tr><tr><th class=\"thStyle2\">审核人</th><td>"+adminApproval.reviewer+
+								"</td></tr><tr><th class=\"thStyle2\">审核时间</th><td>"+adminApproval.time+
+								"</td></tr><tr><th class=\"thStyle2\">备注信息</th><td>"+adminApproval.remark+"</td></tr><table>";
+							}else{
+								adminApprovalTd.innerHTML="管理员未审核";
+							}
+							
 						}else if(a.type==1){
 							typeTd.innerHTML="个人资产转移";
 							managerTr.style.display="none";
 							adminTr.style.display="none";
 							receiverTr.style.display="";
+							if(receiverApproval!=0){//资产接收人已经审核
+								var approvalResult;
+								if(receiverApproval.approve==0){
+									approvalResult="审核通过"
+								}else{
+									approvalResult="审核拒绝";
+								}
+								receiverApprovalTd.innerHTML="<table><tr><th class=\"thStyle2\">审核结果</th><td>"+approvalResult+
+								"</td></tr><tr><th class=\"thStyle2\">审核人</th><td>"+receiverApproval.reviewer+
+								"</td></tr><tr><th class=\"thStyle2\">审核时间</th><td>"+receiverApproval.time+
+								"</td></tr><tr><th class=\"thStyle2\">备注信息</th><td>"+receiverApproval.remark+"</td></tr><table>";
+							}else{
+								receiverApprovalTd.innerHTML="资产接收人未审核";
+							}
 						}else if(a.type==2){
 							typeTd.innerHTML="个人资产归还";
 							managerTr.style.display="none";
 							adminTr.style.display="";
 							receiverTr.style.display="none";
+							if(adminApproval!=0){//管理员已经审核
+								var approvalResult;
+								if(adminApproval.approve==0){
+									approvalResult="审核通过"
+								}else{
+									approvalResult="审核拒绝";
+								}
+								receiverApprovalTd.innerHTML="<table><tr><th class=\"thStyle2\">审核结果</th><td>"+approvalResult+
+								"</td></tr><tr><th class=\"thStyle2\">审核人</th><td>"+adminApproval.reviewer+
+								"</td></tr><tr><th class=\"thStyle2\">审核时间</th><td>"+adminApproval.time+
+								"</td></tr><tr><th class=\"thStyle2\">备注信息</th><td>"+adminApproval.remark+"</td></tr><table>";
+							}else{
+								adminApprovalTd.innerHTML="管理员未审核";
+							}
 						}
 						if(a.finished==1){
 							if(a.refused==0){
@@ -244,6 +330,9 @@ td.tdStyle {
 						rSerialNoTd.innerHTML=r.serialNo;
 						rRemarkTd.innerHTML=r.remark;
 						remarkTd.innerHTML=a.remark;
+						
+						var applicationDiv=document.getElementById("applicationDiv");
+						applicationDiv.style.display="";
 						
 					}, 'json');
 				}
@@ -308,24 +397,48 @@ td.tdStyle {
 		}
 
 		function applyResourceApplications() {
+			$('#button1').linkbutton('select');
+			$('#button2').linkbutton('unselect');
+			$('#button3').linkbutton('unselect');
+			$('#button4').linkbutton('unselect');
+			var applicationDiv=document.getElementById("applicationDiv");
+			applicationDiv.style.display="none";
 			$('#applicationDatagrid').datagrid({
 				url : '${ctx}/user/getUserResourceApplyApplications.do'
 			});
 		}
 
 		function transferResourceApplications() {
+			$('#button1').linkbutton('unselect');
+			$('#button2').linkbutton('select');
+			$('#button3').linkbutton('unselect');
+			$('#button4').linkbutton('unselect');
+			var applicationDiv=document.getElementById("applicationDiv");
+			applicationDiv.style.display="none";
 			$('#applicationDatagrid').datagrid({
 				url : '${ctx}/user/getUserResourceTransferApplications.do'
 			});
 		}
 
 		function returnResourceApplications() {
+			$('#button1').linkbutton('unselect');
+			$('#button2').linkbutton('unselect');
+			$('#button3').linkbutton('select');
+			$('#button4').linkbutton('unselect');
+			var applicationDiv=document.getElementById("applicationDiv");
+			applicationDiv.style.display="none";
 			$('#applicationDatagrid').datagrid({
 				url : '${ctx}/user/getUserResourceReturnApplications.do'
 			});
 		}
 
 		function allApplications() {
+			$('#button1').linkbutton('unselect');
+			$('#button2').linkbutton('unselect');
+			$('#button3').linkbutton('unselect');
+			$('#button4').linkbutton('select');
+			var applicationDiv=document.getElementById("applicationDiv");
+			applicationDiv.style.display="none";
 			$('#applicationDatagrid').datagrid({
 				url : '${ctx}/user/getUserApplications.do'
 			});

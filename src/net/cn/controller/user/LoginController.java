@@ -51,8 +51,9 @@ public class LoginController {
 //		}
 		session.setAttribute("uid", uid);
 //		session.setMaxInactiveInterval(5);
-		modelAndView.setViewName("user/user");
-//		modelAndView.setViewName("admin/admin");
+//		modelAndView.setViewName("user/user");
+		modelAndView.setViewName("admin/admin");
+//		modelAndView.setViewName("manager/manager");
 		return modelAndView;
 	}
 

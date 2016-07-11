@@ -1,20 +1,27 @@
 package net.cn.controller.manager;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import net.cn.model.Application;
+import net.cn.service.ManagerService;
+import net.cn.util.ListUtil;
 
 @Controller("managerResourceAllocationController")
 @RequestMapping("/manager")
 public class ResourceAllocationController {
+	@Resource
+	private ManagerService managerService;
 
 	/**
 	 * @param session
@@ -22,15 +29,12 @@ public class ResourceAllocationController {
 	 */
 	@RequestMapping("/resourceAllocation")
 	public ModelAndView resourceAllocation(HttpSession session) {
-		return null;
-	}
-
-	/**
-	 * @return 获取资产分配申请列表
-	 */
-	@RequestMapping("/getResourceAllocationApplications")
-	public @ResponseBody List<Application> getResourceAllocationApplications() {
-		return null;
+		ModelAndView modelAndView=new ModelAndView();
+		List<Application> applications=managerService.getResourceAllocationApplications();
+		modelAndView.addObject("numOfApplications", applications.size());
+		modelAndView.addObject("applications",applications);
+		modelAndView.setViewName("manager/resourceAllocation");
+		return modelAndView;
 	}
 
 	/**
@@ -40,8 +44,26 @@ public class ResourceAllocationController {
 	 */
 	@RequestMapping("/dealResourceAllocationApplication")
 	public @ResponseBody Map<String, Object> dealResourceAllocationApplication(HttpSession session,
-			Application application) {
-		return null;
+			@RequestParam(value = "aId", required = true) int applicationId,
+			@RequestParam(value = "accept", required = true) boolean accept,
+			@RequestParam(value = "remark", required = false) String remark) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		String uid=(String)session.getAttribute("uid");
+		//判断申请是否已被处理
+		if(ListUtil.applicationContained(applicationId, managerService.getResourceAllocationApplications())){
+			map.put("applicationCompleted",false );
+			//经理同意资产分配申请
+			if(accept){
+				managerService.agreeResourceAllocationApplication(applicationId,uid);
+				map.put("success",true);
+			}else{//经理拒绝资产分配申请
+				managerService.refuseResourceAllocationApplication(applicationId,uid,remark);;
+				map.put("success", true);
+			}
+		}else{
+			map.put("applicationCompleted",true);
+		}
+		return map;
 	}
 
 }

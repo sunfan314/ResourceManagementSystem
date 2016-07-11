@@ -26,17 +26,14 @@ public class FlowServiceImpl implements FlowService{
 	@Override
 	public int getStepInFlow(int flowId, int groupId) {
 		// TODO Auto-generated method stub
-		Flow flow=(Flow)baseDao.get(Flow.class, ApplicationFlowConfig.RECEIVER_FLOW);
+		Flow flow=(Flow)baseDao.get(Flow.class,flowId);
 		List<FlowStep> steps=flow.getSteps();
-		int step=0;
-		for(int i=0;i<steps.size();i++){
-			Group group=steps.get(i).getGroup();
-			if(group.equals(groupDao.get(Group.class, UserGroupConfig.USER))){
-				step=i+1;
-				break;
+		for (FlowStep flowStep : steps) {
+			if(flowStep.getGroup().getId()==groupId){
+				return flowStep.getStep();
 			}
 		}
-		return step;
+		return -1;
 	}
 
 }

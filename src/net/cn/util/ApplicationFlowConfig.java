@@ -9,7 +9,7 @@ public class ApplicationFlowConfig {
 	/**
 	 * 	流程：经理审核-管理员处理
 	 */
-	public static int MANAGER_AMDIN_FLOW=0;
+	public static int MANAGER_ADMIN_FLOW=0;
 	
 	/**
 	 * 流程：管理员直接处理
