@@ -46,6 +46,14 @@ public class Log {
 
 
 
+	public Log(int rid, String owner, String startTime, String remark) {
+		super();
+		this.rid = rid;
+		this.owner = owner;
+		this.startTime = startTime;
+		this.remark = remark;
+	}
+
 	public int getId() {
 		return id;
 	}

@@ -1,10 +1,13 @@
 package net.cn.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -54,7 +57,11 @@ public class Resource {
 	
 	@Transient
 	private String typeName;
-
+	
+	@OneToMany
+	@JoinColumn(name="rid")
+	private List<Log> logs;
+	
 	public int getId() {
 		return id;
 	}
@@ -169,8 +176,12 @@ public class Resource {
 		this.typeName = typeName;
 	}
 
-	
+	public List<Log> getLogs() {
+		return logs;
+	}
 
-	
+	public void setLogs(List<Log> logs) {
+		this.logs = logs;
+	}
 
 }

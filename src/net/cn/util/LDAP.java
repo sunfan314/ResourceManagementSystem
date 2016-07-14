@@ -9,16 +9,16 @@ import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPSearchResults;
 
 public class LDAP {
-	String MY_HOST = "172.20.20.200";// è®¿é—®ADåŸŸçš„IPåœ°å€
-	int MY_PORT = 389;// ç«¯å£å·ï¼Œé»˜è®¤ä¸º389
-	int TIMEOUT = 10000;// è¶…æ—¶è®¾ç½®
-	String searchBase = "dc=kinstalk,dc=com";// åŸŸåå…¥å£
-	int searchScope = LDAPConnection.SCOPE_SUB;// æœç´¢èŒƒå›´
-	String filter = "(|(objectclass=person)(objectclass=user)(objectclass=organizationalPerson))";// è¿‡æ»¤å™¨
+	String MY_HOST = "172.20.20.200";// ·ÃÎÊADÓòµÄIPµØÖ·
+	int MY_PORT = 389;// ¶Ë¿ÚºÅ£¬Ä¬ÈÏÎª389
+	int TIMEOUT = 10000;// ³¬Ê±ÉèÖÃ
+	String searchBase = "dc=kinstalk,dc=com";// ÓòÃûÈë¿Ú
+	int searchScope = LDAPConnection.SCOPE_SUB;// ËÑË÷·¶Î§
+	String filter = "(|(objectclass=person)(objectclass=user)(objectclass=organizationalPerson))";// ¹ıÂËÆ÷
 
 	/**
 	 * @param uid
-	 * @return æ ¹æ®uidè·å–ç”¨æˆ·èŠ‚ç‚¹
+	 * @return ¸ù¾İuid»ñÈ¡ÓÃ»§½Úµã
 	 * @throws Exception
 	 */
 	public List<String> getUserDN(String uid) throws Exception {
@@ -27,7 +27,7 @@ public class LDAP {
 		LDAPConnection ld = new LDAPConnection();
 		ld.setSocketTimeOut(TIMEOUT);
 		ld.connect(MY_HOST, MY_PORT);
-		ld.bind(null, null);// åŒ¿åç™»å½•
+		ld.bind(null, null);// ÄäÃûµÇÂ¼
 
 		LDAPSearchResults searchResults = ld.search(searchBase, searchScope, filter, null, false);
 
@@ -45,7 +45,7 @@ public class LDAP {
 	/**
 	 * @param userDN
 	 * @param password
-	 * @return æ ¹æ®èŠ‚ç‚¹åå’Œç”¨æˆ·å¯†ç å°è¯•è¿æ¥LDAPæœåŠ¡å™¨
+	 * @return ¸ù¾İ½ÚµãÃûºÍÓÃ»§ÃÜÂë³¢ÊÔÁ¬½ÓLDAP·şÎñÆ÷
 	 */
 	public boolean userConnect(String userDN, String password) {
 		if (password.equals("")) {
@@ -53,7 +53,7 @@ public class LDAP {
 		}
 		try {
 			LDAPConnection ld = new LDAPConnection();
-			ld.setSocketTimeOut(TIMEOUT);// è®¾ç½®è¶…æ—¶
+			ld.setSocketTimeOut(TIMEOUT);// ÉèÖÃ³¬Ê±
 			ld.connect(MY_HOST, MY_PORT);
 			ld.bind(userDN, password);
 			return ld.isConnected();
@@ -67,7 +67,7 @@ public class LDAP {
 	/**
 	 * @param uid
 	 * @param password
-	 * @return ç”¨æˆ·ç™»å½•éªŒè¯
+	 * @return ÓÃ»§µÇÂ¼ÑéÖ¤
 	 */
 	public boolean userVerify(String uid, String password) {
 		try {
@@ -83,7 +83,7 @@ public class LDAP {
 	}
 
 	/**
-	 * @return è·å–ç”¨æˆ·åˆ—è¡¨
+	 * @return »ñÈ¡ÓÃ»§ÁĞ±í
 	 */
 	public List<String> getUsers() {
 		List<String> result = new ArrayList<String>();
@@ -91,7 +91,7 @@ public class LDAP {
 			LDAPConnection ld = new LDAPConnection();
 			ld.setSocketTimeOut(TIMEOUT);
 			ld.connect(MY_HOST, MY_PORT);
-			ld.bind(null, null);// åŒ¿åç™»å½•
+			ld.bind(null, null);// ÄäÃûµÇÂ¼
 
 			LDAPSearchResults searchResults = ld.search(searchBase, searchScope, filter, null, false);
 

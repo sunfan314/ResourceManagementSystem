@@ -152,6 +152,7 @@ h2 {
 			<tr>
 				<td><input id="remark" class="easyui-textbox"
 					data-options="multiline:true" style="width: 300px; height: 100px"></td>
+
 			</tr>
 		</table>
 	</div>

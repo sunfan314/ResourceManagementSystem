@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,7 +100,8 @@
 								}, {
 									field : 'owner',
 									title : '拥有人',
-									width : 50
+									width : 50,
+									formatter : ownerFormatter
 								}, {
 									field : 'statusValue',
 									title : '资产状态',
@@ -147,7 +147,8 @@
 																	{
 																		field : 'owner',
 																		title : '资产拥有人',
-																		width : 100
+																		width : 100,
+																		formatter : ownerFormatter
 																	},
 																	{
 																		field : 'startTime',
@@ -182,6 +183,15 @@
 								}
 							});
 
+		}
+		
+		//资产拥有人单元格格式
+		function ownerFormatter(value,row,index){
+			if(value=="warehouse"){
+				return "仓库";
+			}else{
+				return value;
+			}
 		}
 	</script>
 </body>

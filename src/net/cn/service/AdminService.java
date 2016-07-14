@@ -3,16 +3,23 @@ package net.cn.service;
 import java.util.List;
 
 import net.cn.model.Application;
+import net.cn.model.Property;
 import net.cn.model.PurchaseApplication;
 import net.cn.model.Resource;
 
 public interface AdminService {
 	
 	/**
-	 * @param resource
 	 * 入库新购资产
+	 * @param resource
 	 */
 	public void addNewResource(Resource resource);
+	
+	/**	
+	 * 修改资产信息
+	 * @param resource
+	 */
+	public void editResource(Resource resource);
 	
 	/**
 	 * @return	获取资产分配申请列表

@@ -111,7 +111,8 @@
 								singleSelect : true,
 								nowrap : false,
 								fitColumns : true,
-								url : '${ctx}/user/getAvailableResources.do?type=' + type,
+								url : '${ctx}/user/getAvailableResources.do?type='
+										+ type,
 								columns : [ [ {
 									field : 'id',
 									title : '标识',
@@ -146,7 +147,8 @@
 								}, {
 									field : 'owner',
 									title : '拥有人',
-									width : 50
+									width : 50,
+									hidden : true
 								}, {
 									field : 'statusValue',
 									title : '资产状态',
@@ -238,31 +240,26 @@
 				url = "${ctx}/user/applyAvailableResource.do";
 			}
 		}
-		
-		function submitApplication(){
-			$('#fm').form(
-					'submit',
-					{
-						url : url,
-						success : function(result) {	
-							$('#dlg').dialog('close'); // close the dialog
-							$('#resourceList').datagrid('reload'); // reload the user data
-							$('#fm').form('clear');//clear the form
-							result = JSON.parse(result);
-							if (result.success) {						
-								$('#dialogInfo').text("请求提交成功！");
-								$('#info-dlg').dialog('open').dialog(
-										'setTitle', '成功');
 
-							} else {
-								$('#dialogInfo').text("请求提交失败，请重新查看资产状态！");
-								$('#info-dlg').dialog('open').dialog(
-										'setTitle', '失败');
+		function submitApplication() {
+			$('#fm').form('submit', {
+				url : url,
+				success : function(result) {
+					$('#dlg').dialog('close'); // close the dialog
+					$('#resourceList').datagrid('reload'); // reload the user data
+					$('#fm').form('clear');//clear the form
+					result = JSON.parse(result);
+					if (result.success) {
+						$('#dialogInfo').text("请求提交成功！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
 
+					} else {
+						$('#dialogInfo').text("请求提交失败，请重新查看资产状态！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '失败');
 
-							}
-						}
-					});
+					}
+				}
+			});
 		}
 	</script>
 

@@ -9,6 +9,7 @@ import net.cn.dao.BaseDao;
 import net.cn.model.Application;
 import net.cn.model.ApplicationApproval;
 import net.cn.model.Log;
+import net.cn.model.Property;
 import net.cn.model.PurchaseApplication;
 import net.cn.model.Resource;
 import net.cn.model.Type;
@@ -35,7 +36,18 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void addNewResource(Resource resource) {
 		// TODO Auto-generated method stub
+		//获取最大id
+		int id=(Integer)baseDao.find("select max(id) from Resource").get(0)+1;
+		resource.setId(id);
+		baseDao.save(resource);
+		Log log=new Log(id, resource.getOwner(), resource.getEntryDate(), resource.getRemark());
+		baseDao.save(log);
+	}
 
+	@Override
+	public void editResource(Resource resource) {
+		// TODO Auto-generated method stub
+		baseDao.update(resource);
 	}
 
 	@Override

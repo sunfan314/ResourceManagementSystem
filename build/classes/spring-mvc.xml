@@ -123,4 +123,5 @@
 	<mvc:interceptors>
 		<bean class="net.cn.interceptor.UserValidateInterceptor" />
 	</mvc:interceptors>
+	
 </beans>
