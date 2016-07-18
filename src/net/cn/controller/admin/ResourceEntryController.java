@@ -18,7 +18,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import net.cn.model.Property;
 import net.cn.model.Resource;
+import net.cn.model.Type;
 import net.cn.service.AdminService;
+import net.cn.service.ResourceService;
 import net.cn.service.UserService;
 import net.cn.util.LDAP;
 
@@ -30,6 +32,9 @@ public class ResourceEntryController {
 	
 	@javax.annotation.Resource
 	private AdminService adminService;
+	
+	@javax.annotation.Resource
+	private ResourceService resourceService;
 	
 	/**
 	 * @param session
@@ -51,6 +56,41 @@ public class ResourceEntryController {
 		list.add(new Property("warehouse","仓库"));
 		list.addAll(userService.getUsers());
 		return list;
+	}
+	
+	/**
+	 * @return	获取一级类别列表
+	 */
+	@RequestMapping("/getFatherTypes")
+	public @ResponseBody List<Type> getFatherTypes(){
+		List<Type> list=new ArrayList<>();
+		List<Type> types=resourceService.getResourceTypes();
+		for (Type type : types) {
+			if(type.getFatherType()==0){
+				list.add(type);
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * @param typeName
+	 * @param fatherType
+	 * @return	添加新类别
+	 */
+	@RequestMapping("/addType")
+	public @ResponseBody Map<String,Object> addType(String typeName,int fatherType){
+		Map<String,Object> map=new HashMap<String,Object>();
+		List<Type> types=resourceService.getResourceTypes();
+		for (Type type : types) {
+			if(type.getName().equals(typeName)&&type.getFatherType()==fatherType){
+				map.put("success", false);
+				return map;
+			}
+		}
+		resourceService.addType(typeName, fatherType);
+		map.put("success", true);
+		return map;
 	}
 	
 

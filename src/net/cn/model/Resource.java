@@ -24,6 +24,12 @@ import javax.persistence.Transient;
  * status 		资产状态（0：可用；1：损坏） 
  * remark 		备注信息 
  * type 		资产类别
+ * phoneNumber	手机号码(充值卡充值号码或SIM卡号码)
+ * purchaser	购买人
+ * consumer		消耗类物品使用人
+ * imsi			移动用户标识(SIM卡标识)
+ * pack			SIM卡套餐
+ * password		资产密码
  */
 @Entity
 @Table(name = "resource")
@@ -54,6 +60,20 @@ public class Resource {
 	private String remark;
 
 	private int type;
+	
+	private String phoneNumber;
+	
+	private String purchaser;
+	
+	private String consumer;
+	
+	@Column(name="IMSI")
+	private String imsi;
+	
+	@Column(name="package")
+	private String pack;
+	
+	private String password;
 	
 	@Transient
 	private String typeName;
@@ -166,6 +186,54 @@ public class Resource {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getPurchaser() {
+		return purchaser;
+	}
+
+	public void setPurchaser(String purchaser) {
+		this.purchaser = purchaser;
+	}
+
+	public String getConsumer() {
+		return consumer;
+	}
+
+	public void setConsumer(String consumer) {
+		this.consumer = consumer;
+	}
+
+	public String getImsi() {
+		return imsi;
+	}
+
+	public void setImsi(String imsi) {
+		this.imsi = imsi;
+	}
+
+	public String getPack() {
+		return pack;
+	}
+
+	public void setPack(String pack) {
+		this.pack = pack;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getTypeName() {

@@ -23,6 +23,11 @@
 	src="${pageContext.request.contextPath}/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
+<style>
+tr {
+	margin-bottom:50px;
+}
+</style>
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north'" title="资产类别选择" style="height: 100px">
@@ -39,6 +44,9 @@
 				panelHeight:'auto',
 				onChange:function(newValue, oldValue){ typeSelected(newValue)}
 			">
+
+			<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+				onclick="addType()" style="margin-left:50px;">新建类别</a>
 		</div>
 
 	</div>
@@ -72,18 +80,16 @@
 			<table cellpadding="5">
 				<tr id="idTr">
 					<td>资产标识</td>
-					<td><input id="id" name="id"
-						class="easyui-validatebox" readonly></td>
+					<td><input id="id" name="id" class="easyui-validatebox"
+						readonly></td>
 				</tr>
 				<tr>
 					<td>资产名称</td>
-					<td><input id="name" name="name"
-						class="easyui-validatebox"></td>
+					<td><input id="name" name="name" class="easyui-validatebox"></td>
 				</tr>
 				<tr>
 					<td>资产型号</td>
-					<td><input id="model" name="model"
-						class="easyui-validatebox"></td>
+					<td><input id="model" name="model" class="easyui-validatebox"></td>
 				</tr>
 				<tr>
 					<td>追踪码</td>
@@ -92,8 +98,7 @@
 				</tr>
 				<tr>
 					<td>IMEI</td>
-					<td><input id="imei" name="imei"
-						class="easyui-validatebox"></td>
+					<td><input id="imei" name="imei" class="easyui-validatebox"></td>
 				</tr>
 				<tr>
 					<td>序列号</td>
@@ -102,20 +107,18 @@
 				</tr>
 				<tr>
 					<td>资产状态</td>
-					<td><select id="status" name="status"
-						panelHeight="auto" class="easyui-combobox" editable="false">
+					<td><select id="status" name="status" panelHeight="auto"
+						class="easyui-combobox" editable="false">
 							<option value="0">资产正常</option>
 							<option value="1">资产损坏</option></td>
 				</tr>
 				<tr style="display: none;">
 					<td>资产类别</td>
-					<td><input id="type" name="type"
-						class="easyui-validatebox"></td>
+					<td><input id="type" name="type" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="ownerTr1">
 					<td>资产拥有人</td>
-					<td><input id="owner" name="owner"
-						class="easyui-combobox"
+					<td><input id="owner" name="owner" class="easyui-combobox"
 						data-options="
 				url:'${ctx}/admin/getUsers.do',
 				method:'get',
@@ -125,8 +128,8 @@
 				</tr>
 				<tr id="ownerTr2">
 					<td>资产拥有人</td>
-					<td><input id="ownerValidatebox" 
-						class="easyui-validatebox" readonly="true"></td>
+					<td><input id="ownerValidatebox" class="easyui-validatebox"
+						readonly="true"></td>
 				</tr>
 				<tr>
 					<td>入库时间</td>
@@ -135,9 +138,8 @@
 				</tr>
 				<tr>
 					<td>备注信息</td>
-					<td><input id="remark" name="remark"
-						class="easyui-textbox" data-options="multiline:true"
-						style="height: 80px;"></td>
+					<td><input id="remark" name="remark" class="easyui-textbox"
+						data-options="multiline:true" style="height: 80px;"></td>
 				</tr>
 			</table>
 		</form>
@@ -147,6 +149,39 @@
 		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
 			onclick="submit()">提交</a> <a href="#" class="easyui-linkbutton"
 			iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a>
+	</div>
+
+	<div id="type-dlg" class="easyui-dialog"
+		style="width: 300px; height: 230px; padding: 20px" closed="true"
+		buttons="#type-dlg-buttons">
+		<form id="type-fm">
+			<table  style="border-collapse:separate; border-spacing:0px 20px;">
+				<tr>
+					<th>类别名称：</th>
+					<td><input id="typeName" class="easyui-validatebox"></td>
+				</tr>
+				<tr>
+					<th>所属类目:</th>
+					<td><input style="height: 30px;" id="fatherType"
+						class="easyui-combobox"
+						data-options="
+				url:'${ctx}/admin/getFatherTypes.do',
+				method:'get',
+				valueField:'id',
+				textField:'name',
+				panelHeight:'auto'
+			"></td>
+				</tr>
+			</table>
+		</form>
+
+	</div>
+
+	<div id="type-dlg-buttons">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+			onclick="addNewType()">提交</a> <a href="#" class="easyui-linkbutton"
+			iconCls="icon-cancel"
+			onclick="javascript:$('#type-dlg').dialog('close')">取消</a>
 	</div>
 
 	<div id="info-dlg" class="easyui-dialog"
@@ -305,6 +340,31 @@
 				return value;
 			}
 		}
+		
+		function addType(){
+			$('#type-dlg').dialog('open').dialog('setTitle', '新建类别');
+		}
+		
+		function addNewType(){
+			$.post('${ctx}/admin/addType.do', {
+				typeName:$('#typeName').val(),
+				fatherType:$('#fatherType').combobox('getValue')
+			}, function(result) {
+				$('#type-dlg').dialog('close');
+				//申请已被处理
+				if (result.success) {
+					$('#dialogInfo').text("类别添加成功！");
+					$('#info-dlg').dialog('open').dialog('setTitle', '成功');
+					$('#type-fm').form('clear');
+					//刷新类别列表数据
+					$('#resourceType').combobox('reload');
+					
+				} else{
+					$('#dialogInfo').text("类别添加失败，该类别已存在！");
+					$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+				}
+			}, 'json');
+		}
 
 		function addResource() {
 			$('#dlg').dialog('open').dialog('setTitle', '新购资产入库');
@@ -324,10 +384,10 @@
 			//设置资产拥有人为仓库
 			$('#owner').combobox('setValue', 'warehouse');
 			//控制组件的显示与隐藏
-			var ownerTr1=document.getElementById("ownerTr1");
-			var ownerTr2=document.getElementById("ownerTr2");
-			ownerTr1.style.display="";
-			ownerTr2.style.display="none";
+			var ownerTr1 = document.getElementById("ownerTr1");
+			var ownerTr2 = document.getElementById("ownerTr2");
+			ownerTr1.style.display = "";
+			ownerTr2.style.display = "none";
 			url = "${ctx}/admin/enterNewResource.do";
 		}
 
@@ -336,8 +396,8 @@
 			if (row) {
 				$('#dlg').dialog('open').dialog('setTitle', '编辑资产信息');
 				//控制组件的显示
-				var idTr=document.getElementById("idTr");
-				idTr.style.display="";
+				var idTr = document.getElementById("idTr");
+				idTr.style.display = "";
 				//设置资产信息的显示
 				$('#id').val(row.id);
 				$('#name').val(row.name);
@@ -350,37 +410,33 @@
 				$('#owner').combobox('setValue', row.owner);
 				$('#ownerValidatebox').val(row.owner);
 				//控制组件的显示与隐藏
-				var ownerTr1=document.getElementById("ownerTr1");
-				var ownerTr2=document.getElementById("ownerTr2");
-				ownerTr1.style.display="none";
-				ownerTr2.style.display="";
+				var ownerTr1 = document.getElementById("ownerTr1");
+				var ownerTr2 = document.getElementById("ownerTr2");
+				ownerTr1.style.display = "none";
+				ownerTr2.style.display = "";
 				$('#entryDate').val(row.entryDate);
 				$('#remark').textbox('setValue', row.remark);
-				url="${ctx}/admin/editResource.do";
+				url = "${ctx}/admin/editResource.do";
 			}
 		}
 
 		function submit() {
-			$('#fm').form(
-					'submit',
-					{
-						url : url,
-						success : function(result) {
-							$('#dlg').dialog('close'); // close the dialog
-							result = JSON.parse(result);
-							if (result.success) {
-								$('#resourceList').datagrid('reload'); // reload the user data
-								$('#dialogInfo').text("操作成功，已成功添加（修改）资产信息！");
-								$('#info-dlg').dialog('open').dialog(
-										'setTitle', '成功');			
-							} else {
-								$('#dialogInfo').text("操作失败，资产拥有人不存在，请在列表中选择资产拥有人！");
-								$('#info-dlg').dialog('open').dialog(
-										'setTitle', '失败');
-							}
-							
-						}
-					});
+			$('#fm').form('submit', {
+				url : url,
+				success : function(result) {
+					$('#dlg').dialog('close'); // close the dialog
+					result = JSON.parse(result);
+					if (result.success) {
+						$('#resourceList').datagrid('reload'); // reload the user data
+						$('#dialogInfo').text("操作成功，已成功添加（修改）资产信息！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
+					} else {
+						$('#dialogInfo').text("操作失败，资产拥有人不存在，请在列表中选择资产拥有人！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+					}
+
+				}
+			});
 		}
 	</script>
 </body>

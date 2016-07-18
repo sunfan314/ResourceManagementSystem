@@ -32,6 +32,13 @@ public interface ResourceService {
 	 */
 	public List<Type> getResourceTypes();
 	
+	/**	
+	 * 添加新类别
+	 * @param typeName
+	 * @param fatherType
+	 */
+	public void addType(String typeName,int fatherType);
+	
 	
 	/**
 	 * @param type

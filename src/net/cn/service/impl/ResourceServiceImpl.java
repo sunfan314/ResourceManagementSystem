@@ -47,6 +47,15 @@ public class ResourceServiceImpl implements ResourceService{
 	}
 
 	@Override
+	public void addType(String typeName, int fatherType) {
+		// TODO Auto-generated method stub
+		Type type=new Type();
+		type.setName(typeName);
+		type.setFatherType(fatherType);
+		baseDao.save(type);
+	}
+
+	@Override
 	public List<Resource> getCompanyResources(int type) {
 		// TODO Auto-generated method stub
 		return baseDao.find("from Resource where type = ?", type);
