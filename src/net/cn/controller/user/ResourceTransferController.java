@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,13 +30,23 @@ public class ResourceTransferController {
 	 */
 	@RequestMapping("/resourceTransferApplication")
 	public ModelAndView resourceTransferApplication(HttpSession session) {
-		String uid = (String) session.getAttribute("uid");
+//		String uid = (String) session.getAttribute("uid");
 		ModelAndView modelAndView = new ModelAndView();
-		List<Application> applications = userService.getReceivedResourceTransferApplication(uid);
-		modelAndView.addObject("transferApplications", applications);
-		modelAndView.addObject("numOfApplications", applications.size());
+//		List<Application> applications = userService.getReceivedResourceTransferApplication(uid);
+//		modelAndView.addObject("transferApplications", applications);
+//		modelAndView.addObject("numOfApplications", applications.size());
 		modelAndView.setViewName("/user/resourceTransferApplication");
 		return modelAndView;
+	}
+	
+	/**
+	 * @return	获取用户收到的资产转移请求
+	 */
+	@RequestMapping("/getResourceTransferApplications")
+	public @ResponseBody List<Application> getResourceTransferApplications(HttpSession session){
+		String uid=(String)session.getAttribute("uid");
+		List<Application> applications=userService.getReceivedResourceTransferApplication(uid);
+		return applications;
 	}
 
 	/**

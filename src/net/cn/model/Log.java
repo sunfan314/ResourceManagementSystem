@@ -51,6 +51,7 @@ public class Log {
 		this.rid = rid;
 		this.owner = owner;
 		this.startTime = startTime;
+		this.endTime="";
 		this.remark = remark;
 	}
 

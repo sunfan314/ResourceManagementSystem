@@ -103,7 +103,7 @@
 				<tr>
 					<td>资产状态</td>
 					<td><select id="status" name="status"
-						panelHeight="auto" class="easyui-combobox">
+						panelHeight="auto" class="easyui-combobox" editable="false">
 							<option value="0">资产正常</option>
 							<option value="1">资产损坏</option></td>
 				</tr>

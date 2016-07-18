@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import junit.framework.Test;
+import net.cn.service.FlowService;
 import net.cn.service.UserService;
 
 /**
@@ -28,6 +29,9 @@ public class LoginController {
 	
 	@Resource
 	private UserService userService;
+	
+	@Resource
+	private FlowService flowService;
 	
 	/** 
 	 * @return 用户登录界面

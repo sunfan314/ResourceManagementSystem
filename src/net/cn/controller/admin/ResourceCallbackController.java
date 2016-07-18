@@ -53,11 +53,11 @@ public class ResourceCallbackController {
 		//判断申请是否已被处理
 		if(ListUtil.applicationContained(applicationId, adminService.getResourceCallbackApplications())){
 			map.put("applicationCompleted",false );
-			//管理员完成资产分配
+			//管理员完成资产回收
 			if(accept){
-				map.put("success", adminService.agreeResourceAllocationApplication(applicationId, uid));
-			}else{//管理员拒绝资产转移分配
-				adminService.refuseResourceAllocationApplication(applicationId, uid, remark);
+				map.put("success", adminService.agreeResourceCallbackApplication(applicationId, uid));
+			}else{//管理员拒绝资产回收
+				adminService.refuseResourceCallbackApplication(applicationId, uid, remark);
 				map.put("success", true);
 			}
 		}else{

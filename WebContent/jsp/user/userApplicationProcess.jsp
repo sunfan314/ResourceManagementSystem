@@ -298,7 +298,7 @@ td.tdStyle {
 								}else{
 									approvalResult="审核拒绝";
 								}
-								receiverApprovalTd.innerHTML="<table><tr><th class=\"thStyle2\">审核结果</th><td>"+approvalResult+
+								adminApprovalTd.innerHTML="<table><tr><th class=\"thStyle2\">审核结果</th><td>"+approvalResult+
 								"</td></tr><tr><th class=\"thStyle2\">审核人</th><td>"+adminApproval.reviewer+
 								"</td></tr><tr><th class=\"thStyle2\">审核时间</th><td>"+adminApproval.time+
 								"</td></tr><tr><th class=\"thStyle2\">备注信息</th><td>"+adminApproval.remark+"</td></tr><table>";

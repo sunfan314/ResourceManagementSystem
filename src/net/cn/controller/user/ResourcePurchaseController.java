@@ -20,7 +20,10 @@ public class ResourcePurchaseController {
 	 */
 	@RequestMapping("/resourcePurchaseApplication")
 	public ModelAndView resourcePurchaseApplication(HttpSession session){
-		return null;
+		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.addObject("uid",session.getAttribute("uid"));
+		modelAndView.setViewName("user/resourcePurchaseApplication");
+		return modelAndView;
 	}
 	
 	/**

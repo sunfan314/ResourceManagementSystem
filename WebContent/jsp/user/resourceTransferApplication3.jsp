@@ -63,32 +63,86 @@ h2 {
 </style>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'center'" title="资产转移列表">
-		<div style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
-			<table class="easyui-datagrid"
-				data-options="url:'${ctx}/user/getResourceTransferApplications.do',fitColumns:true,singleSelect:true">
-				<thead>
-					<tr>
-						<th data-options="field:'owner',width:60">资产转移人</th>
-						<th data-options="field:'resource.typeName',width:60">资产类型</th>
-						<th data-options="field:'resource.name',width:60">资产名称</th>
-						<th data-options="field:'time',width:60">申请时间</th>
-						<th data-options="field:'remark',width:80">备注信息</th>
-					</tr>
-				</thead>
+	<div data-options="region:'center'">
+		<h2>你有&nbsp;${numOfApplications}&nbsp;条资产转移申请待处理：</h2>
+
+
+		<c:forEach varStatus="i" var="t" items="${transferApplications}">
+
+			<table class="tableStyle">
+				<tr>
+					<th class="thStyle">申请提交时间</th>
+					<td class="tdStyle">${t.time}</td>
+				</tr>
+				<tr>
+					<th class="thStyle">资产转移人</th>
+					<td class="tdStyle">${t.owner}</td>
+				</tr>
+				<tr>
+					<th class="thStyle">待接收资产详情</th>
+					<td class="tdStyle">
+						<table>
+							<tr>
+								<th class="thStyle2">资产类型</th>
+								<td>${t.resource.typeName}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">资产标识</th>
+								<td>${t.resource.id}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">资产名称</th>
+								<td>${t.resource.name}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">资产型号</th>
+								<td>${t.resource.model}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">追踪码</th>
+								<td>${t.resource.trackingNo}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">IMEI</th>
+								<td>${t.resource.imei}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">序列号</th>
+								<td>${t.resource.serialNo}</td>
+							</tr>
+							<tr>
+								<th class="thStyle2">备注信息</th>
+								<td>${t.resource.remark}</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th class="thStyle">备注信息</th>
+					<td class="tdStyle">${t.remark}</td>
+				</tr>
+				<tr>
+					<th class="thStyle">处理申请</th>
+					<td class="tdStyle">
+						<table>
+							<tr>
+								<td><a href="#" class="easyui-linkbutton" iconCls="icon-ok"
+									plain="true" onclick="acceptResource(${t.id})">接收</a></td>
+								<td><a href="#" class="easyui-linkbutton" iconCls="icon-no"
+									plain="true" onclick="refuseResource(${t.id})">拒绝</a></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
 			</table>
-		</div>
-	</div>
-
-	<div data-options="resgion:'east'" style="width: 40%" title="资产转移详情">
-
+		</c:forEach>
 	</div>
 
 	<div id="dlg" class="easyui-dialog"
 		style="width: 380px; height: 325px; padding: 20px" closed="true"
 		buttons="#dlg-buttons">
 		<table cellpadding="5">
-			<tr style="display: none;">
+			<tr style="display:none;">
 				<td>申请标识</td>
 				<td><input id="aId" name="rid" class="easyui-validatebox"></td>
 			</tr>
@@ -122,53 +176,59 @@ h2 {
 	</div>
 
 	<script type="text/javascript">
-		function acceptResource(value) {
+		function acceptResource(value){
 			$.post('${ctx}/user/dealTransferApplication.do', {
-				aId : value,
-				accept : true
+				aId:value,
+				accept:true
 			}, function(result) {
 				//申请已被处理
-				if (result.applicationCompleted) {
+				if(result.applicationCompleted){
 					$('#dialogInfo').text("申请已被处理，请勿重复提交请求！");
-					$('#info-dlg').dialog('open').dialog('setTitle', '警告');
-				} else {
+					$('#info-dlg').dialog('open').dialog(
+							'setTitle', '警告');
+				}else{
 					if (result.success) {
 						$('#dialogInfo').text("资产接收成功！");
-						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
-					} else {
+						$('#info-dlg').dialog('open').dialog(
+								'setTitle', '成功');
+					}else{
 						$('#dialogInfo').text("资产接收失败，资产所有权转移或无权限接收该资产！");
-						$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+						$('#info-dlg').dialog('open').dialog(
+								'setTitle', '失败');
 					}
-				}
+				}		
 
-			}, 'json');
+			}, 'json');		
 		}
-
-		function refuseResource(value) {
+		
+		function refuseResource(value){
 			$('#dlg').dialog('open').dialog('setTitle', '拒绝资产转移申请');
 			$('#aId').val(value);
 		}
-
-		function submitRefuseApplication() {
+		
+		function submitRefuseApplication(){
 			$.post('${ctx}/user/dealTransferApplication.do', {
-				aId : $('#aId').val(),
-				accept : false,
-				remark : $('#remark').val()
+				aId:$('#aId').val(),
+				accept:false,
+				remark:$('#remark').val()
 			}, function(result) {
 				$('#dlg').dialog('close');
 				//申请已被处理
-				if (result.applicationCompleted) {
+				if(result.applicationCompleted){
 					$('#dialogInfo').text("申请已被处理，请勿重复提交请求！");
-					$('#info-dlg').dialog('open').dialog('setTitle', '警告');
-				} else {
+					$('#info-dlg').dialog('open').dialog(
+							'setTitle', '警告');
+				}else{
 					if (result.success) {
 						$('#dialogInfo').text("资产拒绝成功！");
-						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
+						$('#info-dlg').dialog('open').dialog(
+								'setTitle', '成功');
 					}
-				}
+				}		
 
-			}, 'json');
+			}, 'json');	
 		}
+		
 	</script>
 </body>
 </html>
