@@ -30,11 +30,19 @@ public class ResourceAllocationController {
 	@RequestMapping("/resourceAllocation")
 	public ModelAndView resourceAllocation(HttpSession session) {
 		ModelAndView modelAndView=new ModelAndView();
-		List<Application> applications=managerService.getResourceAllocationApplications();
-		modelAndView.addObject("numOfApplications", applications.size());
-		modelAndView.addObject("applications",applications);
+//		List<Application> applications=managerService.getResourceAllocationApplications();
+//		modelAndView.addObject("numOfApplications", applications.size());
+//		modelAndView.addObject("applications",applications);
 		modelAndView.setViewName("manager/resourceAllocation");
 		return modelAndView;
+	}
+	
+	/**
+	 * @return	返回在库资产分配申请列表
+	 */
+	@RequestMapping("/getResourceAllocationApplications")
+	public @ResponseBody List<Application> getResourceAllocationApplications(){
+		return managerService.getResourceAllocationApplications();
 	}
 
 	/**

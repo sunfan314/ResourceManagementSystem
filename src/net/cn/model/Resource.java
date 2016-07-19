@@ -77,9 +77,6 @@ public class Resource {
 	
 	private String password;
 	
-	@Transient
-	private String typeName;
-	
 	@OneToMany
 	@JoinColumn(name="rid")
 	private List<Log> logs;
@@ -236,14 +233,6 @@ public class Resource {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getTypeName() {
-		return typeName;
-	}
-
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
 	}
 
 	public List<Log> getLogs() {

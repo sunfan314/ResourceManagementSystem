@@ -63,94 +63,64 @@ h2 {
 </style>
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'center'">
-		<h2>你有&nbsp;${numOfApplications}&nbsp;条资产归还申请待处理：</h2>
+	<div data-options="region:'center'" title="资产归还请求列表">
+		<div style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+			<table id="allocationApplicationList">
+			</table>
+		</div>
+	</div>
 
-
-		<c:forEach varStatus="i" var="a" items="${applications}">
-
+	<div data-options="region:'east'" style="width: 40%" title="资产归还请求详情">
+		<div id="applicationInfo"
+			style="margin-left: 20px; margin-right: 20px; margin-top: 40px; display: none">
 			<table class="tableStyle">
 				<tr>
 					<th class="thStyle">申请提交时间</th>
-					<td class="tdStyle">${a.time}</td>
+					<td id="time" class="tdStyle"></td>
 				</tr>
 				<tr>
-					<th class="thStyle">资产所有人</th>
-					<td class="tdStyle">${a.owner}</td>
+					<th class="thStyle">资产申请人</th>
+					<td id="receiver" class="tdStyle"></td>
 				</tr>
 				<tr>
-					<th class="thStyle">归还资产详情</th>
+					<th class="thStyle">申请资产详情</th>
 					<td class="tdStyle">
-						<table>
-							<tr>
-								<th class="thStyle2">资产类型</th>
-								<td>${a.resource.typeName}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">资产标识</th>
-								<td>${a.resource.id}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">资产名称</th>
-								<td>${a.resource.name}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">资产型号</th>
-								<td>${a.resource.model}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">追踪码</th>
-								<td>${a.resource.trackingNo}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">IMEI</th>
-								<td>${a.resource.imei}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">序列号</th>
-								<td>${a.resource.serialNo}</td>
-							</tr>
-							<tr>
-								<th class="thStyle2">备注信息</th>
-								<td>${a.resource.remark}</td>
-							</tr>
+						<table id="resourceInfo">
+
 						</table>
 					</td>
 				</tr>
 				<tr>
 					<th class="thStyle">备注信息</th>
-					<td class="tdStyle">${a.remark}</td>
+					<td id="remark" class="tdStyle"></td>
 				</tr>
 				<tr>
-					<th class="thStyle">处理申请</th>
+					<th class="thStyle">审核申请</th>
 					<td class="tdStyle">
 						<table>
 							<tr>
 								<td><a href="#" class="easyui-linkbutton" iconCls="icon-ok"
-									plain="true" onclick="acceptApplication(${a.id})">同意</a></td>
+									plain="true" onclick="acceptApplication()">同意</a></td>
 								<td><a href="#" class="easyui-linkbutton" iconCls="icon-no"
-									plain="true" onclick="refuseApplication(${a.id})">拒绝</a></td>
+									plain="true" onclick="refuseApplication()">拒绝</a></td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 			</table>
-		</c:forEach>
+		</div>
 	</div>
 
+
 	<div id="dlg" class="easyui-dialog"
-		style="width: 380px; height: 325px; padding: 20px" closed="true"
+		style="width: 380px; height: 280px; padding: 20px" closed="true"
 		buttons="#dlg-buttons">
 		<table cellpadding="5">
-			<tr style="display: none;">
-				<td>申请标识</td>
-				<td><input id="aId" name="rid" class="easyui-validatebox"></td>
-			</tr>
 			<tr>
 				<td>备注信息：（可不填）</td>
 			</tr>
 			<tr>
-				<td><input id="remark" class="easyui-textbox"
+				<td><input id="approvalRemark" class="easyui-textbox"
 					data-options="multiline:true" style="width: 300px; height: 100px"></td>
 			</tr>
 		</table>
@@ -174,58 +144,106 @@ h2 {
 			onclick="javascript:$('#info-dlg').dialog('close');location.reload(true);">确定</a>
 	</div>
 	<script type="text/javascript">
-	function acceptApplication(value){
-		$.post('${ctx}/admin/dealResourceCallbackApplication.do', {
-			aId:value,
-			accept:true
-		}, function(result) {
-			//申请已被处理
-			if(result.applicationCompleted){
-				$('#dialogInfo').text("申请已被处理，请勿重复提交请求！");
-				$('#info-dlg').dialog('open').dialog(
-						'setTitle', '警告');
-			}else{
-				if (result.success) {
-					$('#dialogInfo').text("申请处理成功，已完成资产回收！");
-					$('#info-dlg').dialog('open').dialog(
-							'setTitle', '成功');
-				}else{
-					$('#dialogInfo').text("申请处理失败，资产所有权转移！");
-					$('#info-dlg').dialog('open').dialog(
-							'setTitle', '失败');
-				}
-			}		
+		$(function() {
+			$('#allocationApplicationList').datagrid({
+				remoteSort : false,
+				singleSelect : true,
+				nowrap : false,
+				fitColumns : true,
+				url : '${ctx}/admin/getResourceCallbackApplications.do',
+				columns : [ [ {
+					field : 'id',
+					title : '申请标识',
+					width : 40
+				}, {
+					field : 'resource',
+					title : '资产类型',
+					width : 60,
+					formatter : function(value, row, index) {
+						if (value) {
+							return value.type.name;
+						}
+					}
+				}, {
+					field : 'resourceName',
+					title : '资产名称',
+					width : 60
+				}, {
+					field : 'owner',
+					title : '资产归还人',
+					width : 60
+				}, {
+					field : 'time',
+					title : '申请发起时间',
+					width : 90
+				}, {
+					field : 'remark',
+					title : '备注信息',
+					width : 90
+				} ] ],
+				//双击显示申请详情
+				onDblClickRow : function(index, row) {
+					$('#dlg').dialog('close');
+					//显示申请详情信息
+					$('#applicationInfo').show();
+					applicationId = row.id;
+					var timeTd = document.getElementById('time');
+					var receiverTd = document.getElementById('receiver');
+					var remarkTd = document.getElementById('remark');
+					timeTd.innerHTML = row.time;
+					receiverTd.innerHTML = row.receiver;
+					remarkTd.innerHTML = row.remark;
 
-		}, 'json');		
-	}
-	
-	function refuseApplication(value){
-		$('#dlg').dialog('open').dialog('setTitle', '拒绝资产分配申请');
-		$('#aId').val(value);
-	}
-	
-	function submitRefuseApplication(){
-		$.post('${ctx}/admin/dealResourceCallbackApplication.do', {
-			aId:$('#aId').val(),
-			accept:false,
-			remark:$('#remark').val()
-		}, function(result) {
-			$('#dlg').dialog('close');
-			//申请已被处理
-			if(result.applicationCompleted){
-				$('#dialogInfo').text("申请已被处理，请勿重复提交请求！");
-				$('#info-dlg').dialog('open').dialog(
-						'setTitle', '警告');
-			}else{
-				if (result.success) {
-					$('#dialogInfo').text("申请处理成功，已拒绝资产回收申请！");
-					$('#info-dlg').dialog('open').dialog(
-							'setTitle', '成功');
 				}
-			}		
+			});
+		});
+		
+		function acceptApplication() {
+			$.post('${ctx}/admin/dealResourceCallbackApplication.do', {
+				aId : applicationId,
+				accept : true
+			}, function(result) {
+				//申请已被处理
+				if (result.applicationCompleted) {
+					$('#dialogInfo').text("申请已被处理，请勿重复提交请求！");
+					$('#info-dlg').dialog('open').dialog('setTitle', '警告');
+				} else {
+					if (result.success) {
+						$('#dialogInfo').text("申请处理成功，已完成资产回收！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
+					} else {
+						$('#dialogInfo').text("申请处理失败，资产所有权转移！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+					}
+				}
 
-		}, 'json');	
-	}
+			}, 'json');
+		}
+
+		function refuseApplication() {
+			$('#dlg').dialog('open').dialog('setTitle', '拒绝资产分配申请');
+		}
+
+		function submitRefuseApplication() {
+			$.post('${ctx}/admin/dealResourceCallbackApplication.do', {
+				aId : applicationId,
+				accept : false,
+				remark : $('#approvalRemark').val()
+			}, function(result) {
+				$('#dlg').dialog('close');
+				//申请已被处理
+				if (result.applicationCompleted) {
+					$('#dialogInfo').text("申请已被处理，请勿重复提交请求！");
+					$('#info-dlg').dialog('open').dialog('setTitle', '警告');
+				} else {
+					if (result.success) {
+						$('#dialogInfo').text("申请处理成功，已拒绝资产回收申请！");
+						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
+					}
+				}
+
+			}, 'json');
+		}
 	</script>
 </body>
 </html>

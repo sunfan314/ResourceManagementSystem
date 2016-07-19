@@ -107,9 +107,14 @@
 									title : '资产状态',
 									width : 60
 								}, {
-									field : 'typeName',
+									field : 'type',
 									title : '资产类别',
-									width : 100
+									width : 100,
+									formatter:function(value,row,index){
+										if(value){
+											return value.name;
+										}
+									}
 								}, {
 									field : 'remark',
 									title : '备注信息',

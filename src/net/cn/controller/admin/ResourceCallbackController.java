@@ -30,12 +30,21 @@ public class ResourceCallbackController {
 	@RequestMapping("/resourceCallback")
 	public ModelAndView resourceCallback(HttpSession session){
 		ModelAndView modelAndView=new ModelAndView();
-		List<Application> applications=adminService.getResourceCallbackApplications();
-		modelAndView.addObject("numOfApplications", applications.size());
-		modelAndView.addObject("applications", applications);
+//		List<Application> applications=adminService.getResourceCallbackApplications();
+//		modelAndView.addObject("numOfApplications", applications.size());
+//		modelAndView.addObject("applications", applications);
 		modelAndView.setViewName("admin/resourceCallback");
 		return modelAndView;
 	}
+	
+	/**
+	 * @return	返回资产回收请求列表
+	 */
+	@RequestMapping("/getResourceCallbackApplications")
+	public @ResponseBody List<Application> getResourceCallbackApplications(){
+		return adminService.getResourceCallbackApplications();
+	}
+	
 	
 	
 	/**
