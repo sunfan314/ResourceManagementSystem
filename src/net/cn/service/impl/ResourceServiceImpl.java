@@ -58,7 +58,8 @@ public class ResourceServiceImpl implements ResourceService{
 	@Override
 	public List<Resource> getCompanyResources(int type) {
 		// TODO Auto-generated method stub
-		return baseDao.find("from Resource where type = ?", type);
+		Type typeEntity=(Type)baseDao.get(Type.class, type);
+		return baseDao.find("from Resource where type = ?", typeEntity);
 	}
 	
 	
@@ -67,7 +68,7 @@ public class ResourceServiceImpl implements ResourceService{
 	public List<Resource> getAvailableResources(int type) {
 		// TODO Auto-generated method stub
 		List<Object> params=new ArrayList<>();
-		params.add(type);
+		params.add((Type)baseDao.get(Type.class, type));
 		params.add("warehouse");
 		return baseDao.find("from Resource where type = ? and owner = ?",params);
 	}
@@ -77,9 +78,6 @@ public class ResourceServiceImpl implements ResourceService{
 	public List<Resource> getPersonalResources(String uid) {
 		// TODO Auto-generated method stub
 		List<Resource> list=baseDao.find("from Resource where owner = ?",uid);
-		for (Resource resource : list) {
-			resource.setTypeName(((Type)baseDao.get(Type.class, resource.getType())).getName());
-		}
 		return list;
 	}
 

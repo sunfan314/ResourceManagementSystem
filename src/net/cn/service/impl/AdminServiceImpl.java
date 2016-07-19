@@ -184,8 +184,6 @@ public class AdminServiceImpl implements AdminService {
 	private List<Application> setApplicationResource(List<Application> list) {
 		for (Application application : list) {
 			Resource resource = (Resource) baseDao.get(Resource.class, application.getRid());
-			Type type = (Type) baseDao.get(Type.class, resource.getType());
-			resource.setTypeName(type.getName());
 			application.setResource(resource);
 			application.setResourceName(resource.getName());
 		}

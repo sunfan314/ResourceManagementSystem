@@ -59,11 +59,9 @@ public class Resource {
 
 	private String remark;
 	
-//	@ManyToOne(targetEntity=Type.class)
-//	@JoinColumn(name="type")
-//	private Type type;
-	
-	private int type;
+	@ManyToOne(targetEntity=Type.class)
+	@JoinColumn(name="type")
+	private Type type;
 	
 	private String phoneNumber;
 	
@@ -184,24 +182,16 @@ public class Resource {
 		this.remark = remark;
 	}
 	
-//	public Type getType() {
-//		return type;
-//	}
-//
-//	public void setType(Type type) {
-//		this.type = type;
-//	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public int getType() {
+	public Type getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(Type type) {
 		this.type = type;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
