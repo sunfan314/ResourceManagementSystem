@@ -25,7 +25,7 @@
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
 <style>
 tr {
-	margin-bottom:50px;
+	margin-bottom: 50px;
 }
 </style>
 </head>
@@ -46,7 +46,7 @@ tr {
 			">
 
 			<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-				onclick="addType()" style="margin-left:50px;">新建类别</a>
+				onclick="addType()" style="margin-left: 30px;">新建类别</a>
 		</div>
 
 	</div>
@@ -155,7 +155,7 @@ tr {
 		style="width: 300px; height: 230px; padding: 20px" closed="true"
 		buttons="#type-dlg-buttons">
 		<form id="type-fm">
-			<table  style="border-collapse:separate; border-spacing:0px 20px;">
+			<table style="border-collapse: separate; border-spacing: 0px 20px;">
 				<tr>
 					<th>类别名称：</th>
 					<td><input id="typeName" class="easyui-validatebox"></td>

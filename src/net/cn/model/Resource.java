@@ -58,7 +58,11 @@ public class Resource {
 	private String statusValue;
 
 	private String remark;
-
+	
+//	@ManyToOne(targetEntity=Type.class)
+//	@JoinColumn(name="type")
+//	private Type type;
+	
 	private int type;
 	
 	private String phoneNumber;
@@ -179,6 +183,18 @@ public class Resource {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
+	
+//	public Type getType() {
+//		return type;
+//	}
+//
+//	public void setType(Type type) {
+//		this.type = type;
+//	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
 
 	public int getType() {
 		return type;
@@ -186,10 +202,6 @@ public class Resource {
 
 	public void setType(int type) {
 		this.type = type;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
