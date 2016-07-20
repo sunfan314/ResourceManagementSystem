@@ -64,5 +64,11 @@ public interface ResourceService {
 	 */
 	public List<Log> getResourceLogs(int rid);
 	
+	/**
+	 * @param rid
+	 * @return	根据资产标识获取资产信息
+	 */
+	public Resource getResource(int rid);
+	
 
 }

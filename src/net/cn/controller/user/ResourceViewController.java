@@ -2,6 +2,8 @@ package net.cn.controller.user;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.jws.WebParam.Mode;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -77,12 +79,20 @@ public class ResourceViewController {
 		return list;
 	}
 
-	/**
-	 * @return 某类别企业资产列表
-	 */
+//	/**
+//	 * @return 某类别企业资产列表
+//	 */
+//	@RequestMapping("/getCompanyResources")
+//	public @ResponseBody List<Resource> getCompanyResources(int type) {
+//		return resourceService.getCompanyResources(type);
+//	}
+	
 	@RequestMapping("/getCompanyResources")
-	public @ResponseBody List<Resource> getCompanyResources(int type) {
-		return resourceService.getCompanyResources(type);
+	public ModelAndView getCompanyResources(int type){
+		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.addObject("resources", resourceService.getCompanyResources(type));
+		modelAndView.setViewName("resource/companyResources");
+		return modelAndView;
 	}
 	
 	/**

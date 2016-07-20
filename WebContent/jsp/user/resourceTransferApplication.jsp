@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="net.cn.util.ResourceTypeConfig" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
@@ -23,7 +24,7 @@
 <style>
 table.tableStyle {
 	font-family: verdana, arial, sans-serif;
-	font-size: 11px;
+	font-size: 12px;
 	color: #333333;
 	border-width: 2px;
 	border-color: #95B8E7;
@@ -83,14 +84,11 @@ h2 {
 				</tr>
 				<tr>
 					<th class="thStyle">待接收资产详情</th>
-					<td class="tdStyle">
-						<table id="resourceInfo">
-							
-						</table>
+					<td id="resourceInfo" class="tdStyle">
 					</td>
 				</tr>
 				<tr>
-					<th class="thStyle">备注信息</th>
+					<th class="thStyle">申请备注信息</th>
 					<td id="remark" class="tdStyle"></td>
 				</tr>
 				<tr>
@@ -194,7 +192,12 @@ h2 {
 				timeTd.innerHTML=row.time;
 				ownerTd.innerHTML=row.owner;
 				remarkTd.innerHTML=row.remark;
-				
+				//根据资产类别显示资产详情
+				var resourceInfo=document.getElementById('resourceInfo');
+				resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
+						+row.resource.id+"' frameborder='no'  style='width:100%;' "
+						+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
+						+"></iframe>";
 			}
 		});
 	});

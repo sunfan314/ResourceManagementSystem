@@ -87,5 +87,11 @@ public class ResourceServiceImpl implements ResourceService{
 		return baseDao.find("from Log where rid = ?", rid);
 	}
 
+	@Override
+	public Resource getResource(int rid) {
+		// TODO Auto-generated method stub
+		return (Resource)baseDao.get(Resource.class, rid);
+	}
+
 
 }

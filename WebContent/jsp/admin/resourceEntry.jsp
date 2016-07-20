@@ -114,7 +114,7 @@ tr {
 				</tr>
 				<tr style="display: none;">
 					<td>资产类别</td>
-					<td><input id="type" name="type" class="easyui-validatebox"></td>
+					<td><input id="type" name="type.id" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="ownerTr1">
 					<td>资产拥有人</td>

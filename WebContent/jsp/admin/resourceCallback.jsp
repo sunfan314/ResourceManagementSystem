@@ -193,7 +193,12 @@ h2 {
 					timeTd.innerHTML = row.time;
 					receiverTd.innerHTML = row.receiver;
 					remarkTd.innerHTML = row.remark;
-
+					//根据资产类别显示资产详情
+					var resourceInfo=document.getElementById('resourceInfo');
+					resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
+							+row.resource.id+"' frameborder='no'  style='width:100%;' "
+							+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
+							+"></iframe>";
 				}
 			});
 		});
