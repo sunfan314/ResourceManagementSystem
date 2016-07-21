@@ -161,6 +161,10 @@ public class Resource {
 			break;
 		case 1:
 			temp="资产损坏";
+			break;
+		case 2:
+			temp="资产已消耗";
+			break;
 		default:
 			break;
 		}

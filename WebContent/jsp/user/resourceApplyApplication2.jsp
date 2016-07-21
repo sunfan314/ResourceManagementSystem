@@ -44,12 +44,17 @@
 	</div>
 
 	<div data-options="region:'center'" title="企业资产列表">
-		<div id="resourceList" style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
+		<div style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+			<table id="resourceList">
+			</table>
 		</div>
 	</div>
 
 	<div data-options="region:'east'" style="width: 35%" title="资产使用记录">
-		<div id="resourceLogList" style="margin-left: 20px; margin-right: 20px; margin-top: 40px">		
+		<div id="logDiv"
+			style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+			<table id="resourceLogList">
+			</table>
 		</div>
 	</div>
 

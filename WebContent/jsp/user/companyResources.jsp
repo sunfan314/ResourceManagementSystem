@@ -34,24 +34,38 @@
 				onChange:function(newValue, oldValue){ typeSelected(newValue)}
 			">
 		</div>
-
 	</div>
 
 	<div data-options="region:'center'" title="企业资产列表">
-		<div id="resourceList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
-
+		<div id="resourceList" style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
+		</div>
+	</div>
+	
+	
+	<div data-options="region:'east'" style="width: 40%;" title="资产使用记录">
+		<div id="resourceLogList" style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
 		</div>
 	</div>
 
 
-
 	<script type="text/javascript">
 		function typeSelected(value) {
+			$('#resourceLogList').hide();
 			type = value;
 			var resourceList = document.getElementById("resourceList");
-			resourceList.innerHTML = "<iframe src='${ctx}/user/getCompanyResources.do?type="
-					+ type+ "' frameborder='no'  style='width:100%;height:100%'></iframe>";
+			resourceList.innerHTML = "<iframe name='resourceListIframe' src='${ctx}/user/getCompanyResources.do?type="
+					+ type+ "' frameborder='no'  style='width:100%;'>"
+					+"onload='this.height=resourceListIframe.document.body.scrollHeight'"
+					+"</iframe>";
+		}
+		
+		function showResourceLogList(rid){
+			$('#resourceLogList').show();
+			var resourceLogList=document.getElementById("resourceLogList");
+			resourceLogList.innerHTML="<iframe name='resourceLogIframe' src='${ctx}/user/getResourceLogs.do?rid="
+				+ rid+ "' frameborder='no'  style='width:100%;'"
+				+"onload='this.height=resourceLogIframe.document.body.scrollHeight'"
+				+"></iframe>";
 		}
 	</script>
 

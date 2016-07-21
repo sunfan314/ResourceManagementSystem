@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tools.ant.taskdefs.Untar;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,12 +39,19 @@ public class ResourceApplyController {
 		return modelAndView;
 	}
 
+
+	
 	/**
+	 * @param type
 	 * @return 获取某类别下企业在库资产列表
 	 */
 	@RequestMapping("/getAvailableResources")
-	public @ResponseBody List<Resource> getAvailableResources(int type) {
-		return resourceService.getAvailableResources(type);
+	public ModelAndView getAvailableResources(int type){
+		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.addObject("type", resourceService.getType(type));
+		modelAndView.addObject("resources", resourceService.getAvailableResources(type));
+		modelAndView.setViewName("resource/resourceList");
+		return modelAndView;
 	}
 
 	/**

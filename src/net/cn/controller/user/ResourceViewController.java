@@ -79,19 +79,17 @@ public class ResourceViewController {
 		return list;
 	}
 
-//	/**
-//	 * @return 某类别企业资产列表
-//	 */
-//	@RequestMapping("/getCompanyResources")
-//	public @ResponseBody List<Resource> getCompanyResources(int type) {
-//		return resourceService.getCompanyResources(type);
-//	}
 	
+	/**
+	 * @param type
+	 * @return 某类别企业资产列表
+	 */
 	@RequestMapping("/getCompanyResources")
 	public ModelAndView getCompanyResources(int type){
 		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.addObject("type", resourceService.getType(type));
 		modelAndView.addObject("resources", resourceService.getCompanyResources(type));
-		modelAndView.setViewName("resource/companyResources");
+		modelAndView.setViewName("resource/resourceList");
 		return modelAndView;
 	}
 	
@@ -124,14 +122,17 @@ public class ResourceViewController {
 		}
 		
 	}
-	
+
 	/**
 	 * @param rid
-	 * @return	获取某资产使用记录表
+	 * @return	获取资产使用记录表
 	 */
 	@RequestMapping("/getResourceLogs")
-	public @ResponseBody List<Log> getResourceLog(int rid){
-		return resourceService.getResourceLogs(rid);
+	public ModelAndView getResourceLogs(int rid){
+		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.addObject("logs",resourceService.getResourceLogs(rid));
+		modelAndView.setViewName("resource/resourceLogs");
+		return modelAndView;
 	}
 
 }

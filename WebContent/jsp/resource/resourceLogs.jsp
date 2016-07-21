@@ -3,12 +3,11 @@
 <%@ page import="net.cn.util.ResourceTypeConfig"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>企业资产列表</title>
+<title>资产使用记录表</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css"
@@ -23,11 +22,38 @@
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
 </head>
 <body>
-	
-	
-	
+	<table id="dg" class="easyui-datagrid"
+		data-options="fitColumns:true,singleSelect:true">
+		<thead>
+			<tr>
+				<th data-options="field:'id',width:30">日志标识</th>
+				<th data-options="field:'owner',width:50,formatter:userFormatter">拥有人</th>
+				<th data-options="field:'startTime',width:70">开始时间</th>
+				<th data-options="field:'endTime',width:70">结束时间</th>
+				<th data-options="field:'remark',width:100">备注信息</th>
+			</tr>
+		</thead>
+		<tbody>
+			<c:forEach var="l" items="${logs}">
+				<tr>
+					<td>${l.id}</td>
+					<td>${l.owner}</td>
+					<td>${l.startTime}</td>
+					<td>${l.endTime}</td>
+					<td>${l.remark}</td>				
+				</tr>
+			</c:forEach>
+		</tbody>
+	</table>
+
 	<script type="text/javascript">
-		
+		function userFormatter(value, row, index) {
+			if (value == "warehouse") {
+				return "仓库";
+			} else {
+				return value;
+			}
+		}
 	</script>
 </body>
 </html>

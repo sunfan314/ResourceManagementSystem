@@ -119,7 +119,7 @@ td {
 				</tr>
 				<tr>
 					<th>领用人</th>
-					<td>${resource.consumer}</td>
+					<td>${resource.owner}</td>
 				</tr>
 				<tr>
 					<th>备注信息</th>
@@ -152,7 +152,7 @@ td {
 				</tr>
 				<tr>
 					<th>领用人</th>
-					<td>${resource.consumer}</td>
+					<td>${resource.owner}</td>
 				</tr>
 				<tr>
 					<th>备注信息</th>
