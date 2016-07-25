@@ -26,7 +26,6 @@ import javax.persistence.Transient;
  * type 		资产类别
  * phoneNumber	手机号码(充值卡充值号码或SIM卡号码)
  * purchaser	购买人
- * consumer		消耗类物品使用人
  * imsi			移动用户标识(SIM卡标识)
  * pack			SIM卡套餐
  * password		资产密码
@@ -67,7 +66,6 @@ public class Resource {
 	
 	private String purchaser;
 	
-	private String consumer;
 	
 	@Column(name="IMSI")
 	private String imsi;
@@ -205,14 +203,6 @@ public class Resource {
 
 	public void setPurchaser(String purchaser) {
 		this.purchaser = purchaser;
-	}
-
-	public String getConsumer() {
-		return consumer;
-	}
-
-	public void setConsumer(String consumer) {
-		this.consumer = consumer;
 	}
 
 	public String getImsi() {

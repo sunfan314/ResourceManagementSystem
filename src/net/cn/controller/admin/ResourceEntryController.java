@@ -101,6 +101,7 @@ public class ResourceEntryController {
 	 */
 	@RequestMapping("/enterNewResource")
 	public @ResponseBody Map<String, Object> enterNewResource(Resource resource) {
+		System.out.println("start");
 		Map<String,Object> map=new HashMap<String,Object>();
 		LDAP ldap=new LDAP();
 		List<String> userList=ldap.getUsers();

@@ -65,14 +65,14 @@ h2 {
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'center'" title="资产转移请求列表">
-		<div style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+		<div style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
 			<table id="transferApplicationList">
 			</table>
 		</div>
 	</div>
 
 	<div data-options="region:'east'" style="width: 40%" title="资产转移请求详情">
-		<div id="applicationInfo" style="margin-left:20px;margin-right:20px;margin-top:40px;display:none">
+		<div id="applicationInfo" style="margin-left:20px;margin-right:20px;margin-top:20px;display:none">
 			<table class="tableStyle">
 				<tr>
 					<th class="thStyle">申请提交时间</th>

@@ -79,11 +79,11 @@ h2 {
 					<td id="time" class="tdStyle"></td>
 				</tr>
 				<tr>
-					<th class="thStyle">资产申请人</th>
-					<td id="receiver" class="tdStyle"></td>
+					<th class="thStyle">资产归还人</th>
+					<td id="returner" class="tdStyle"></td>
 				</tr>
 				<tr>
-					<th class="thStyle">申请资产详情</th>
+					<th class="thStyle">归还资产详情</th>
 					<td class="tdStyle">
 						<table id="resourceInfo">
 
@@ -188,10 +188,10 @@ h2 {
 					$('#applicationInfo').show();
 					applicationId = row.id;
 					var timeTd = document.getElementById('time');
-					var receiverTd = document.getElementById('receiver');
+					var returnerTd = document.getElementById('returner');
 					var remarkTd = document.getElementById('remark');
 					timeTd.innerHTML = row.time;
-					receiverTd.innerHTML = row.receiver;
+					returnerTd.innerHTML = row.owner;
 					remarkTd.innerHTML = row.remark;
 					//根据资产类别显示资产详情
 					var resourceInfo=document.getElementById('resourceInfo');

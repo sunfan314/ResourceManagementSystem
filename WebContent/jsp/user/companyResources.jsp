@@ -49,24 +49,30 @@
 
 
 	<script type="text/javascript">
+		//选择资产类别之后显示该类别资产列表
 		function typeSelected(value) {
 			$('#resourceLogList').hide();
 			type = value;
 			var resourceList = document.getElementById("resourceList");
-			resourceList.innerHTML = "<iframe name='resourceListIframe' src='${ctx}/user/getCompanyResources.do?type="
-					+ type+ "' frameborder='no'  style='width:100%;'>"
-					+"onload='this.height=resourceListIframe.document.body.scrollHeight'"
+			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
+					+"src='${ctx}/user/getCompanyResources.do?type="+ type
+					+ "' frameborder='no'  style='width:100%;'"
+					+"onload='this.height=resourceListIframe.document.body.scrollHeight'>"
 					+"</iframe>";
 		}
 		
+		//显示资产使用日志信息
 		function showResourceLogList(rid){
 			$('#resourceLogList').show();
 			var resourceLogList=document.getElementById("resourceLogList");
-			resourceLogList.innerHTML="<iframe name='resourceLogIframe' src='${ctx}/user/getResourceLogs.do?rid="
-				+ rid+ "' frameborder='no'  style='width:100%;'"
+			resourceLogList.innerHTML="<iframe id='resourceLogIframe' name='resourceLogIframe' "
+				+"src='${ctx}/user/getResourceLogs.do?rid="+ rid
+				+ "' frameborder='no'  style='width:100%;'"
 				+"onload='this.height=resourceLogIframe.document.body.scrollHeight'"
 				+"></iframe>";
 		}
+		
+		
 	</script>
 
 </body>

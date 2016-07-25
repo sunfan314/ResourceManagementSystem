@@ -6,6 +6,10 @@ import net.cn.model.Log;
 import net.cn.model.Resource;
 import net.cn.model.Type;
 
+/**
+ * @author sunfan314
+ *
+ */
 public interface ResourceService {
 	
 	/**
@@ -69,6 +73,13 @@ public interface ResourceService {
 	 * @return	根据资产标识获取资产信息
 	 */
 	public Resource getResource(int rid);
+	
+	
+	/**
+	 * @param type
+	 * @return	获取类别的父类别
+	 */
+	public int getFatherType(int type);
 	
 
 }

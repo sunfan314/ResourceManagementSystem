@@ -112,13 +112,19 @@ public class ResourceViewController {
 	 * @return 个人资产列表
 	 */
 	@RequestMapping("/getPersonalResources")
-	public @ResponseBody List<Resource> getPersonalResources(@RequestParam(value="uid",required=false)String uid,HttpSession session) {
+	public ModelAndView getPersonalResources(@RequestParam(value="uid",required=false)String uid,HttpSession session) {
 		if(uid==null){
 			//查看自身名下资产列表
-			return resourceService.getPersonalResources((String)session.getAttribute("uid"));
+			ModelAndView modelAndView=new ModelAndView();
+			modelAndView.addObject("resources", resourceService.getPersonalResources((String)session.getAttribute("uid")));
+			modelAndView.setViewName("resource/personalResourcesList");
+			return modelAndView;
 		}else{
 			//查看他人名下资产列表
-			return resourceService.getPersonalResources(uid);
+			ModelAndView modelAndView=new ModelAndView();
+			modelAndView.addObject("resources", resourceService.getPersonalResources(uid));
+			modelAndView.setViewName("resource/personalResourceList");
+			return modelAndView;
 		}
 		
 	}

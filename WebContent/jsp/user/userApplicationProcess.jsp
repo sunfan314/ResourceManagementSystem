@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="net.cn.util.ApplicationTypeConfig" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -32,7 +33,6 @@ table.tableStyle {
 	margin-left: 60px;
 	margin-top: 10px;
 }
-
 th.thStyle {
 	text-align: left;
 	padding: 4px;
@@ -41,13 +41,11 @@ th.thStyle {
 	border-color: #95B8E7;
 	width: 200px;
 }
-
 th.thStyle2 {
 	text-align: left;
 	padding: 4px;
 	width: 50px;
 }
-
 td.tdStyle {
 	padding-left: 10px;
 	border-width: 2px;
@@ -109,41 +107,8 @@ td.tdStyle {
 				</tr>
 				<tr>
 					<th class="thStyle">资产详情</th>
-					<td class="tdStyle">
-						<table>
-							<tr>
-								<th class="thStyle2">资产类型</th>
-								<td id="rType"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">资产标识</th>
-								<td id="rId"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">资产名称</th>
-								<td id="rName"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">资产型号</th>
-								<td id="rModel"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">追踪码</th>
-								<td id="rTrackingNo"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">IMEI</th>
-								<td id="rIMEI"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">序列号</th>
-								<td id="rSerialNo"></td>
-							</tr>
-							<tr>
-								<th class="thStyle2">备注信息</th>
-								<td id="rRemark"></td>
-							</tr>
-						</table>
+					<td id="resourceInfo" class="tdStyle">
+						
 					</td>
 				</tr>
 				<tr>
@@ -193,14 +158,6 @@ td.tdStyle {
 						var statusTd=document.getElementById("status");
 						var ownerTd=document.getElementById("owner");
 						var receiverTd=document.getElementById("receiver");
-						var rTypeTd=document.getElementById("rType");
-						var rIdTd=document.getElementById("rId");
-						var rNameTd=document.getElementById("rName");
-						var rModelTd=document.getElementById("rModel");
-						var rTrackingNoTd=document.getElementById("rTrackingNo");
-						var rIMEITd=document.getElementById("rIMEI");
-						var rSerialNoTd=document.getElementById("rSerialNo");
-						var rRemarkTd=document.getElementById("rRemark");
 						var remarkTd=document.getElementById("remark");
 						var managerTr=document.getElementById("managerTr");
 						var adminTr=document.getElementById("adminTr");
@@ -233,7 +190,8 @@ td.tdStyle {
 								}
 							}
 						}
-						if(a.type==0){
+						//在库资产分配申请
+						if(a.type==<%=ApplicationTypeConfig.APPLY_RESOURCE%>){
 							typeTd.innerHTML="在库资产分配";
 							managerTr.style.display="";
 							adminTr.style.display="";
@@ -267,7 +225,8 @@ td.tdStyle {
 								adminApprovalTd.innerHTML="管理员未审核";
 							}
 							
-						}else if(a.type==1){
+						}//个人资产转移申请
+						else if(a.type==<%=ApplicationTypeConfig.TRANSFER_RESOURCE%>){
 							typeTd.innerHTML="个人资产转移";
 							managerTr.style.display="none";
 							adminTr.style.display="none";
@@ -286,7 +245,8 @@ td.tdStyle {
 							}else{
 								receiverApprovalTd.innerHTML="资产接收人未审核";
 							}
-						}else if(a.type==2){
+						}//个人资产归还申请
+						else if(a.type==<%=ApplicationTypeConfig.RETURN_RESOURCE%>){
 							typeTd.innerHTML="个人资产归还";
 							managerTr.style.display="none";
 							adminTr.style.display="";
@@ -321,15 +281,14 @@ td.tdStyle {
 						}
 						ownerTd.innerHTML=a.owner;
 						receiverTd.innerHTML=a.receiver;
-						rTypeTd.innerHTML=a.type;
-						rIdTd.innerHTML=r.id;
-						rNameTd.innerHTML=r.name;
-						rModelTd.innerHTML=r.model;
-						rTrackingNoTd.innerHTML=r.trackingNo;
-						rIMEITd.innerHTML=r.imei;
-						rSerialNoTd.innerHTML=r.serialNo;
-						rRemarkTd.innerHTML=r.remark;
 						remarkTd.innerHTML=a.remark;
+						
+						//显示资产详情
+						var resourceInfo=document.getElementById("resourceInfo");
+						resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
+							+r.id+"' frameborder='no'  style='width:100%;' "
+							+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
+							+"></iframe>";
 						
 						var applicationDiv=document.getElementById("applicationDiv");
 						applicationDiv.style.display="";
@@ -374,7 +333,6 @@ td.tdStyle {
 				}
 			}
 		}
-
 		//申请状态单元格样式
 		function statusStyler(value, row, index) {
 			if (row.finished == 1) {
@@ -395,7 +353,6 @@ td.tdStyle {
 				}
 			}
 		}
-
 		function applyResourceApplications() {
 			$('#button1').linkbutton('select');
 			$('#button2').linkbutton('unselect');
@@ -407,7 +364,6 @@ td.tdStyle {
 				url : '${ctx}/user/getUserResourceApplyApplications.do'
 			});
 		}
-
 		function transferResourceApplications() {
 			$('#button1').linkbutton('unselect');
 			$('#button2').linkbutton('select');
@@ -419,7 +375,6 @@ td.tdStyle {
 				url : '${ctx}/user/getUserResourceTransferApplications.do'
 			});
 		}
-
 		function returnResourceApplications() {
 			$('#button1').linkbutton('unselect');
 			$('#button2').linkbutton('unselect');
@@ -431,7 +386,6 @@ td.tdStyle {
 				url : '${ctx}/user/getUserResourceReturnApplications.do'
 			});
 		}
-
 		function allApplications() {
 			$('#button1').linkbutton('unselect');
 			$('#button2').linkbutton('unselect');

@@ -20,13 +20,18 @@
 	src="${pageContext.request.contextPath}/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
+<style>
+td {
+	WORD-WRAP: break-word;
+}
+</style>
 </head>
 <body>
 	<table id="dg" class="easyui-datagrid"
 		data-options="fitColumns:true,singleSelect:true">
 		<thead>
 			<tr>
-				<th data-options="field:'id',width:30">日志标识</th>
+				<th data-options="field:'id',width:35">日志标识</th>
 				<th data-options="field:'owner',width:50,formatter:userFormatter">拥有人</th>
 				<th data-options="field:'startTime',width:70">开始时间</th>
 				<th data-options="field:'endTime',width:70">结束时间</th>

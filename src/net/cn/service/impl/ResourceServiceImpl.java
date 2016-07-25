@@ -93,5 +93,12 @@ public class ResourceServiceImpl implements ResourceService{
 		return (Resource)baseDao.get(Resource.class, rid);
 	}
 
+	@Override
+	public int getFatherType(int type) {
+		// TODO Auto-generated method stub
+		Type t=(Type)baseDao.get(Type.class, type);
+		return t.getFatherType();
+	}
+
 
 }

@@ -40,168 +40,45 @@
 	</div>
 
 	<div data-options="region:'center'" title="个人资产列表">
-		<div style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
-			<table id="resourceList">
-			</table>
+		<div id="resourceList"
+			style="margin-left: 20px; margin-right: 20px; margin-top: 20px;height:85%">
 		</div>
 	</div>
 
-	<div data-options="region:'east'" style="width: 35%" title="资产使用记录">
-		<div id="logDiv"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
-			<table id="resourceLogList">
-			</table>
+	<div data-options="region:'east'" style="width: 40%" title="资产使用记录">
+		<div id="resourceLogList"
+			style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
+
 		</div>
 	</div>
 
 	<script type="text/javascript">
 		function userSelected(value) {
-			var user = value;
-			$('#logDiv').hide();
-			$('#resourceList')
-					.datagrid(
-							{
-								remoteSort : false,
-								singleSelect : true,
-								nowrap : false,
-								fitColumns : true,
-								url : '${ctx}/user/getPersonalResources.do?uid=' + user,
-								columns : [ [ {
-									field : 'id',
-									title : '标识',
-									width : 40,
-									sortable : true
-								}, {
-									field : 'name',
-									title : '名称',
-									width : 80,
-									sortable : true
-								}, {
-									field : 'model',
-									title : '型号',
-									width : 80
-								}, {
-									field : 'trackingNo',
-									title : '追踪码',
-									width : 80
-								}, {
-									field : 'imei',
-									title : 'IMEI',
-									width : 80
-								}, {
-									field : 'serialNo',
-									title : '序列号',
-									width : 80,
-									align : 'center'
-								}, {
-									field : 'entryDate',
-									title : '入库时间',
-									width : 80
-								}, {
-									field : 'owner',
-									title : '拥有人',
-									width : 50,
-									formatter : ownerFormatter
-								}, {
-									field : 'statusValue',
-									title : '资产状态',
-									width : 60
-								}, {
-									field : 'type',
-									title : '资产类别',
-									width : 100,
-									formatter:function(value,row,index){
-										if(value){
-											return value.name;
-										}
-									}
-								}, {
-									field : 'remark',
-									title : '备注信息',
-									width : 120,
-									hidden : true
-								} ] ],
-								view : detailview,
-								//资产备注信息
-								detailFormatter : function(rowIndex, rowData) {
-									return '<table><tr>'
-											+ '<td style="border:0">'
-											+ '<p>备注信息: ' + rowData.remark
-											+ '</p>' + '</td>'
-											+ '</tr></table>';
-								},
-								//设置双击查看资产使用日志
-								onDblClickRow : function() {
-									$('#logDiv').show();
-									var row = $('#resourceList').datagrid(
-											'getSelected');
-									if (row) {
-										var rid = row.id;
-										$('#resourceLogList')
-												.datagrid(
-														{
-															remoteSort : false,
-															singleSelect : true,
-															nowrap : false,
-															fitColumns : true,
-															url : '${ctx}/user/getResourceLogs.do?rid='
-																	+ rid,
-															columns : [ [
-																	{
-																		field : 'id',
-																		title : '日志标识',
-																		width : 80,
-																		sortable : true
-																	},
-																	{
-																		field : 'owner',
-																		title : '资产拥有人',
-																		width : 100,
-																		formatter : ownerFormatter
-																	},
-																	{
-																		field : 'startTime',
-																		title : '开始使用时间',
-																		width : 120
-																	},
-																	{
-																		field : 'endTime',
-																		title : '结束使用时间',
-																		width : 120
-																	},
-																	{
-																		field : 'remark',
-																		title : '备注信息',
-																		width : 60,
-																		hidden : true
-																	} ] ],
-															view : detailview,
-															detailFormatter : function(
-																	rowIndex,
-																	rowData) {
-																return '<table><tr>'
-																		+ '<td style="border:0">'
-																		+ '<p>备注信息: '
-																		+ rowData.remark
-																		+ '</p>'
-																		+ '</td>'
-																		+ '</tr></table>';
-															}
-														});
-									}
-								}
-							});
+			$('#resourceLogList').hide();
+			var resourceList = document.getElementById("resourceList");
+			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
+					+ "src='${ctx}/user/getPersonalResources.do?uid="+ value
+					+ "' frameborder='no'  style='width:100%;height:100%'"
+					+ "></iframe>";
+			$('iframe#resourceListIframe').on("load",function(){
+				//为资产列表添加管理资产工具栏
+				window.frames["resourceListIframe"].hideToolbar();
+			});
+		}
 
+		//显示资产使用日志信息
+		function showResourceLogList(rid) {
+			$('#resourceLogList').show();
+			var resourceLogList = document.getElementById("resourceLogList");
+			resourceLogList.innerHTML = "<iframe id='resourceLogIframe' name='resourceLogIframe'"
+					+ " src='${ctx}/user/getResourceLogs.do?rid="+ rid
+					+ "' frameborder='no'  style='width:100%;'"
+					+ "onload='this.height=resourceLogIframe.document.body.scrollHeight'"
+					+ "></iframe>";
 		}
 		
-		//资产拥有人单元格格式
-		function ownerFormatter(value,row,index){
-			if(value=="warehouse"){
-				return "仓库";
-			}else{
-				return value;
-			}
-		}
+		
+		
 	</script>
 </body>
 </html>

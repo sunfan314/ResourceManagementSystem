@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
-<%@page import="net.cn.util.ResourceTypeConfig" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -25,9 +24,8 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
 <style>
-
-tr.hide {
-	display:none;
+tr {
+	margin-bottom: 50px;
 }
 </style>
 </head>
@@ -54,15 +52,25 @@ tr.hide {
 	</div>
 
 	<div data-options="region:'center'" title="企业资产列表">
-		<div id="resourceList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 20px;height:85%">
+		<div style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+			<table id="resourceList">
+			</table>
 		</div>
 	</div>
 
-	<div data-options="region:'east'" style="width: 40%" title="资产使用记录">
-		<div id="resourceLogList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
+	<div data-options="region:'east'" style="width: 35%" title="资产使用记录">
+		<div id="logDiv"
+			style="margin-left: 20px; margin-right: 20px; margin-top: 40px">
+			<table id="resourceLogList">
+			</table>
 		</div>
+	</div>
+
+	<div id="toolbar">
+		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+			onclick="addResource()">新购资产入库</a> <a href="#"
+			class="easyui-linkbutton" iconCls="icon-edit" plain="true"
+			onclick="editResource()">编辑资产信息</a>
 	</div>
 
 	<div id="dlg" class="easyui-dialog"
@@ -79,52 +87,22 @@ tr.hide {
 					<td>资产名称</td>
 					<td><input id="name" name="name" class="easyui-validatebox"></td>
 				</tr>
-				<tr id="modelTr">
+				<tr>
 					<td>资产型号</td>
 					<td><input id="model" name="model" class="easyui-validatebox"></td>
 				</tr>
-				<tr id="trackingNoTr">
+				<tr>
 					<td>追踪码</td>
 					<td><input id="trackingNo" name="trackingNo"
 						class="easyui-validatebox"></td>
 				</tr>
-				<tr id="imeiTr">
+				<tr>
 					<td>IMEI</td>
 					<td><input id="imei" name="imei" class="easyui-validatebox"></td>
 				</tr>
-				<tr id="serialNoTr">
+				<tr>
 					<td>序列号</td>
 					<td><input id="serialNo" name="serialNo"
-						class="easyui-validatebox"></td>
-				</tr>
-				<tr id="phoneNumberTr">
-					<td id="phoneNumberTd">手机号码</td>
-					<td><input id="phoneNumber" name="phoneNumber"
-						class="easyui-validatebox"></td>
-				</tr>
-				<tr id="purchaserTr">
-					<td>购买人</td>
-					<td><input id="purchaser" name="purchaser" class="easyui-combobox"
-						data-options="
-				url:'${ctx}/admin/getUsers.do',
-				method:'get',
-				valueField:'value',
-				textField:'text',
-				panelHeight:'200px'"></td>
-				</tr>
-				<tr id="imsiTr">
-					<td>IMSI</td>
-					<td><input id="imsi" name="imsi"
-						class="easyui-validatebox"></td>
-				</tr>
-				<tr id="packTr">
-					<td>套餐信息</td>
-					<td><input id="pack" name="pack"
-						class="easyui-validatebox"></td>
-				</tr>
-				<tr id="passwordTr">	
-					<td>密码</td>
-					<td><input id="password" name="password"
 						class="easyui-validatebox"></td>
 				</tr>
 				<tr>
@@ -132,15 +110,14 @@ tr.hide {
 					<td><select id="status" name="status" panelHeight="auto"
 						class="easyui-combobox" editable="false">
 							<option value="0">资产正常</option>
-							<option value="1">资产损坏</option>
-							<option value="2">资产被消耗</td>
+							<option value="1">资产损坏</option></td>
 				</tr>
-				<tr class="hide">
+				<tr style="display: none;">
 					<td>资产类别</td>
 					<td><input id="type" name="type.id" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="ownerTr1">
-					<td id="ownerTd">资产拥有人</td>
+					<td>资产拥有人</td>
 					<td><input id="owner" name="owner" class="easyui-combobox"
 						data-options="
 				url:'${ctx}/admin/getUsers.do',
@@ -219,47 +196,154 @@ tr.hide {
 	</div>
 
 	<script type="text/javascript">
-		//选择资产类别之后显示该类别资产列表
+		var type;
 		function typeSelected(value) {
-			$('#resourceLogList').hide();
 			type = value;
-			$.post(
-				"${ctx}/resource/getFatherType.do",
-				{
-					type:value
-				},function(result){
-					fatherType=result.fatherType;
-				},"json"
-			);
-			var resourceList = document.getElementById("resourceList");
-			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
-				+"src='${ctx}/user/getCompanyResources.do?type="+ type
-				+ "' frameborder='no'  style='width:100%;height:100%'>"
-				+"</iframe>";
-			$('iframe#resourceListIframe').on("load",function(){
-				//为资产列表添加管理资产工具栏
-				window.frames["resourceListIframe"].initEntrtyResourceToolbar();
-			});
-			
-		}
-	
-		//显示资产使用日志信息
-		function showResourceLogList(rid){
-			$('#resourceLogList').show();
-			var resourceLogList=document.getElementById("resourceLogList");
-			resourceLogList.innerHTML="<iframe id='resourceLogIframe' name='resourceLogIframe' "
-				+"src='${ctx}/user/getResourceLogs.do?rid="+ rid
-				+ "' frameborder='no'  style='width:100%;'"
-				+"onload='this.height=resourceLogIframe.document.body.scrollHeight'"
-				+"></iframe>";
+			$('#logDiv').hide();
+			$('#resourceList')
+					.datagrid(
+							{
+								toolbar : "#toolbar",
+								remoteSort : false,
+								singleSelect : true,
+								nowrap : false,
+								fitColumns : true,
+								url : '${ctx}/user/getCompanyResources.do?type='+ type,
+								columns : [ [ {
+									field : 'id',
+									title : '标识',
+									width : 40,
+									sortable : true
+								}, {
+									field : 'name',
+									title : '名称',
+									width : 80,
+									sortable : true
+								}, {
+									field : 'model',
+									title : '型号',
+									width : 80
+								}, {
+									field : 'trackingNo',
+									title : '追踪码',
+									width : 80
+								}, {
+									field : 'imei',
+									title : 'IMEI',
+									width : 80
+								}, {
+									field : 'serialNo',
+									title : '序列号',
+									width : 80,
+									align : 'center'
+								}, {
+									field : 'entryDate',
+									title : '入库时间',
+									width : 80
+								}, {
+									field : 'owner',
+									title : '拥有人',
+									width : 50,
+									formatter : ownerFormatter
+								}, {
+									field : 'statusValue',
+									title : '资产状态',
+									width : 60
+								}, {
+									field : 'remark',
+									title : '备注信息',
+									width : 120,
+									hidden : true
+								},{
+									field : 'status',
+									title : '资产状态',
+									width : 60,
+									hidden : true
+								}] ],
+								view : detailview,
+								//资产备注信息
+								detailFormatter : function(rowIndex, rowData) {
+									return '<table><tr>'
+											+ '<td style="border:0">'
+											+ '<p>备注信息: ' + rowData.remark
+											+ '</p>' + '</td>'
+											+ '</tr></table>';
+								},
+								//设置双击查看资产使用日志
+								onDblClickRow : function() {
+									$('#logDiv').show();
+									var row = $('#resourceList').datagrid(
+											'getSelected');
+									if (row) {
+										var rid = row.id;
+										$('#resourceLogList')
+												.datagrid(
+														{
+															remoteSort : false,
+															singleSelect : true,
+															nowrap : false,
+															fitColumns : true,
+															url : '${ctx}/user/getResourceLogs.do?rid='
+																	+ rid,
+															columns : [ [
+																	{
+																		field : 'id',
+																		title : '日志标识',
+																		width : 80,
+																		sortable : true
+																	},
+																	{
+																		field : 'owner',
+																		title : '资产拥有人',
+																		width : 100
+																	},
+																	{
+																		field : 'startTime',
+																		title : '开始使用时间',
+																		width : 120
+																	},
+																	{
+																		field : 'endTime',
+																		title : '结束使用时间',
+																		width : 120
+																	},
+																	{
+																		field : 'remark',
+																		title : '备注信息',
+																		width : 60,
+																		hidden : true
+																	} ] ],
+															view : detailview,
+															detailFormatter : function(
+																	rowIndex,
+																	rowData) {
+																return '<table><tr>'
+																		+ '<td style="border:0">'
+																		+ '<p>备注信息: '
+																		+ rowData.remark
+																		+ '</p>'
+																		+ '</td>'
+																		+ '</tr></table>';
+															}
+														});
+									}
+								}
+							});
 		}
 		
-		//创建新建类别dlg
+		//资产拥有人单元格格式
+		function ownerFormatter(value,row,index){
+			if(value=="warehouse"){
+				return "仓库";
+			}else{
+				return value;
+			}
+		}
+		
 		function addType(){
 			$('#type-dlg').dialog('open').dialog('setTitle', '新建类别');
 		}
 		
-		//创建新类别
 		function addNewType(){
 			$.post('${ctx}/admin/addType.do', {
 				typeName:$('#typeName').val(),
@@ -280,11 +364,12 @@ tr.hide {
 				}
 			}, 'json');
 		}
-	
-		//入库新购资产
 		function addResource() {
 			$('#dlg').dialog('open').dialog('setTitle', '新购资产入库');
 			$('#fm').form('clear');
+			//控制组件的隐藏
+			var idTr=document.getElementById("idTr");
+			idTr.style.display="none";
 			//由于id传递到后台的resource对象属性中，所以不能是空字符，传入0在后台进行处理
 			$('#id').val(0);
 			$('#type').val(type);
@@ -297,43 +382,40 @@ tr.hide {
 			//设置资产拥有人为仓库
 			$('#owner').combobox('setValue', 'warehouse');
 			//控制组件的显示与隐藏
-			$('#idTr').addClass("hide");
-			$('#ownerTr1').removeClass();
-			$('#ownerTr2').addClass("hide");
-			//根据类别决定显示的组件
-			componentDisplay();
+			var ownerTr1 = document.getElementById("ownerTr1");
+			var ownerTr2 = document.getElementById("ownerTr2");
+			ownerTr1.style.display = "";
+			ownerTr2.style.display = "none";
 			url = "${ctx}/admin/enterNewResource.do";
 		}
-
-		function editResource(row) {
-			$('#dlg').dialog('open').dialog('setTitle', '编辑资产信息');
-			//控制组件的显示与隐藏
-			$('#idTr').removeClass();
-			$('#ownerTr1').addClass("hide");
-			$('#ownerTr2').removeClass();
-			//根据类别决定显示的组件
-			componentDisplay();
-			//设置资产信息的显示
-			$('#id').val(row.id);
-			$('#name').val(row.name);
-			$('#model').val(row.model);
-			$('#trackingNo').val(row.trackingNo);
-			$('#imei').val(row.imei);
-			$('#serialNo').val(row.serialNo);
-			$('#phoneNumber').val(row.phoneNumber);
-			$('#purchaser').combobox('setValue',row.purchaser);
-			$('#imsi').val(row.imsi);
-			$('#pack').val(row.pack);
-			$('#password').val(row.password);
-			$('#status').combobox('setValue', row.status);
-			$('#type').val(type);
-			$('#owner').combobox('setValue', row.owner);
-			$('#ownerValidatebox').val(row.owner);
-			$('#entryDate').val(row.entryDate);
-			$('#remark').textbox('setValue', row.remark);
-			url = "${ctx}/admin/editResource.do";
+		function editResource() {
+			var row = $('#resourceList').datagrid('getSelected');
+			if (row) {
+				$('#dlg').dialog('open').dialog('setTitle', '编辑资产信息');
+				//控制组件的显示
+				var idTr = document.getElementById("idTr");
+				idTr.style.display = "";
+				//设置资产信息的显示
+				$('#id').val(row.id);
+				$('#name').val(row.name);
+				$('#model').val(row.model);
+				$('#trackingNo').val(row.trackingNo);
+				$('#imei').val(row.imei);
+				$('#serialNo').val(row.serialNo);
+				$('#status').combobox('setValue', row.status);
+				$('#type').val(type);
+				$('#owner').combobox('setValue', row.owner);
+				$('#ownerValidatebox').val(row.owner);
+				//控制组件的显示与隐藏
+				var ownerTr1 = document.getElementById("ownerTr1");
+				var ownerTr2 = document.getElementById("ownerTr2");
+				ownerTr1.style.display = "none";
+				ownerTr2.style.display = "";
+				$('#entryDate').val(row.entryDate);
+				$('#remark').textbox('setValue', row.remark);
+				url = "${ctx}/admin/editResource.do";
+			}
 		}
-
 		function submit() {
 			$('#fm').form('submit', {
 				url : url,
@@ -341,75 +423,16 @@ tr.hide {
 					$('#dlg').dialog('close'); // close the dialog
 					result = JSON.parse(result);
 					if (result.success) {
+						$('#resourceList').datagrid('reload'); // reload the user data
 						$('#dialogInfo').text("操作成功，已成功添加（修改）资产信息！");
 						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
 					} else {
 						$('#dialogInfo').text("操作失败，资产拥有人不存在，请在列表中选择资产拥有人！");
 						$('#info-dlg').dialog('open').dialog('setTitle', '失败');
 					}
-
 				}
 			});
 		}
-		
-		function componentDisplay(){
-			//SIM卡
-			if(type==<%=ResourceTypeConfig.SIM_CARD%>){
-				$('#modelTr').addClass("hide");
-				$('#trackingNoTr').addClass("hide");
-				$('#imeiTr').addClass("hide");
-				$('#serialNoTr').addClass("hide");
-				$('#phoneNumberTr').removeClass();
-				$('#purchaserTr').addClass("hide");
-				$('#imsiTr').removeClass();
-				$('#packTr').removeClass();
-				$('#passwordTr').removeClass();
-				$('#phoneNumberTd').html("手机号码");
-				$('#ownerTd').html("资产拥有人");
-				
-			}//手机充值卡
-			else if(type==<%=ResourceTypeConfig.PHONE_CARD%>){
-				$('#modelTr').addClass("hide");
-				$('#trackingNoTr').addClass("hide");
-				$('#imeiTr').addClass("hide");
-				$('#serialNoTr').addClass("hide");
-				$('#phoneNumberTr').removeClass();
-				$('#purchaserTr').removeClass();
-				$('#imsiTr').addClass("hide");
-				$('#packTr').addClass("hide");
-				$('#passwordTr').addClass("hide");
-				$('#phoneNumberTd').html("充值号码");
-				$('#ownerTd').html("领用人");
-				$('#purchaser').combobox('setValue', 'warehouse');
-			}//消耗类物品
-			else if(fatherType==<%=ResourceTypeConfig.CONSUMABLE%>){
-				$('#modelTr').addClass("hide");
-				$('#trackingNoTr').addClass("hide");
-				$('#imeiTr').addClass("hide");
-				$('#serialNoTr').addClass("hide");
-				$('#phoneNumberTr').addClass("hide");
-				$('#purchaserTr').removeClass();
-				$('#imsiTr').addClass("hide");
-				$('#packTr').addClass("hide");
-				$('#passwordTr').addClass("hide");
-				$('#ownerTd').html("领用人");
-				$('#purchaser').combobox('setValue', 'warehouse');
-				
-			}//通用设备
-			else{
-				$('#modelTr').removeClass();
-				$('#trackingNoTr').removeClass();
-				$('#imeiTr').removeClass();
-				$('#serialNoTr').removeClass();
-				$('#phoneNumberTr').addClass("hide");
-				$('#purchaserTr').addClass("hide");
-				$('#imsiTr').addClass("hide");
-				$('#packTr').addClass("hide");
-				$('#passwordTr').addClass("hide");
-				$('#ownerTd').html("资产拥有人");
-			}
-		}
-		
 	</script>
 </body>
 </html>
