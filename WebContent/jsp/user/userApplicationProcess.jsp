@@ -64,7 +64,7 @@ td.tdStyle {
 				data-options="url:'${ctx}/user/getUserApplications.do',fitColumns:true,singleSelect:true">
 				<thead>
 					<tr>
-						<th data-options="field:'id',width:20,hidden:true">申请标识</th>
+						<th data-options="field:'id',width:20">申请标识</th>
 						<th data-options="field:'resourceName',width:60">资产名称</th>
 						<th data-options="field:'owner',width:50,formatter:userFormatter">资产拥有人</th>
 						<th data-options="field:'receiver',width:50,formatter:userFormatter">资产接收人</th>
@@ -145,8 +145,24 @@ td.tdStyle {
 	
 		$(function() {
 			$('#applicationDatagrid').datagrid({
+				onLoadSuccess:function(data){
+					if(data.total==0){
+						//设置没有数据时在表格中进行提示
+						$('#applicationDatagrid').datagrid('appendRow',{
+							id:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
+						});
+						$('#applicationDatagrid').datagrid('mergeCells',{
+							index:0,
+							field:'id',
+							colspan:7
+						});
+					}
+				},
 				//设置双击事件
 				onDblClickRow : function(index, row) {
+					if(!row.resourceName){
+						return;
+					}
 					$.post('${ctx}/user/getApplicationDetailInfo.do', {
 						aId : row.id
 					}, function(result) {

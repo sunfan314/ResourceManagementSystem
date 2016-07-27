@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="net.cn.util.ResourceTypeConfig"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="resourceType" value="${type.id}" />
 <c:set var="resourceFatherType" value="${type.fatherType}" />
@@ -113,6 +114,14 @@ td {
 
 	<script type="text/javascript">
 		$(function() {
+			//easyui的datagrid存在数据加载完添加toolbar无法appendRow的问题
+			$('#dg').datagrid({
+				toolbar : '#applyResourceToolbar'
+			});
+			$('#dg').datagrid({
+				toolbar : '#entryResourceToolbar'
+			});
+				
 			//控制不同类别的资产显示的属性字段
 			var SIM_CARD =<%=ResourceTypeConfig.SIM_CARD%>;
 			var PHONE_CARD =<%=ResourceTypeConfig.PHONE_CARD%>;
@@ -150,11 +159,27 @@ td {
 				$('#dg').datagrid('hideColumn', 'password');
 				$('#dg').datagrid('hideColumn', 'purchaser');
 			}
-			$('#dg').datagrid({
-				onDblClickRow : function(index, row) {
-					parent.showResourceLogList(row.id);
-				}
-			});
+			
+			var dataSize="${fn:length(resources)}";
+			if(dataSize==0){
+				//设置没有数据时在表格中进行提示
+				$('#dg').datagrid('appendRow',{
+					id:"<div style='font-weight:bold;margin-left:400px;'>没有相关数据</div>"
+				});
+				$('#dg').datagrid('mergeCells',{
+					index:0,
+					field:'id',
+					colspan:16
+				});
+			}else{
+				//设置双击显示资产使用日志
+				$('#dg').datagrid({
+					onDblClickRow : function(index, row) {
+						parent.showResourceLogList(row.id);
+					}
+				});
+			}
+			
 		});
 
 		//用户字段格式
@@ -166,12 +191,16 @@ td {
 			}
 		}
 		
+		//查看企业资产时隐藏工具栏
+		function hideToolbars(){
+			$('#applyResourceToolbar').hide();
+			$('#entryResourceToolbar').hide();
+		}
+		
 		//***************资产申请--开始****************************
-		//为数据表添加资产申请工具栏
-		function initApplyResourceToolbar() {
-			$('#dg').datagrid({
-				toolbar : '#applyResourceToolbar'
-			})
+		//申请资产时隐藏资产入库工具栏
+		function hideEntryResourceToolbar() {	
+			$('#entryResourceToolbar').hide();
 		}
 
 		//父页面创建在库资产申请
@@ -186,11 +215,9 @@ td {
 		
 		
 		//***************资产入库--开始****************************
-		//为数据表添加资产入库工具栏
-		function initEntrtyResourceToolbar() {
-			$('#dg').datagrid({
-				toolbar : '#entryResourceToolbar'
-			})
+		//入库资产时隐藏资产申请工具栏
+		function hideApplyResourceToolbar() {
+			$('#applyResourceToolbar').hide();
 		}
 
 		//在父页面创建资产入库dlg

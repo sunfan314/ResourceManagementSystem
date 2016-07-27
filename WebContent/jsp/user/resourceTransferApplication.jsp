@@ -180,10 +180,27 @@ h2 {
 				title:'备注信息',
 				width:90
 			}]],
+			onLoadSuccess:function(data){
+				if(data.total==0){
+					//设置没有数据时在表格中进行提示
+					$('#transferApplicationList').datagrid('appendRow',{
+						id:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
+					});
+					$('#transferApplicationList').datagrid('mergeCells',{
+						index:0,
+						field:'id',
+						colspan:6
+					});
+
+				}
+			},
 			//双击显示申请详情
 			onDblClickRow:function(index,row){
 				$('#dlg').dialog('close');
-				//显示申请详情信息
+				if(!row.resource){
+					return;
+				}
+				//在有数据时显示申请详情信息
 				$('#applicationInfo').show();
 				applicationId=row.id;
 				var timeTd=document.getElementById('time');
@@ -195,11 +212,13 @@ h2 {
 				//根据资产类别显示资产详情
 				var resourceInfo=document.getElementById('resourceInfo');
 				resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
-						+row.resource.id+"' frameborder='no'  style='width:100%;' "
-						+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
-						+"></iframe>";
+					+row.resource.id+"' frameborder='no'  style='width:100%;' "
+					+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
+					+"></iframe>";				
+				
 			}
 		});
+		
 	});
 	
 	function acceptResource(){

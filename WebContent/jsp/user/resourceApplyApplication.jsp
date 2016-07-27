@@ -21,8 +21,6 @@
 	src="${pageContext.request.contextPath}/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/easyui/expand/datagrid-emptyData.js"></script>
 </head>
 <body class="easyui-layout">
 	<div data-options="region:'north'" title="资产类别选择" style="height: 100px">
@@ -105,7 +103,7 @@
 					+ "</iframe>";
 			$('iframe#resourceListIframe').on("load",function(){
 				//为资产列表添加申请资产工具栏
-				window.frames["resourceListIframe"].initApplyResourceToolbar();
+				window.frames["resourceListIframe"].hideEntryResourceToolbar();
 			});
 			
 		}

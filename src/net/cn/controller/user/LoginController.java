@@ -74,5 +74,12 @@ public class LoginController {
 		}
 		return modelAndView;
 	}
+	
+	@RequestMapping("/test")
+	public ModelAndView test(){
+		ModelAndView modelAndView=new ModelAndView();
+		modelAndView.setViewName("user/datagrid-test");
+		return modelAndView;
+	}
 
 }

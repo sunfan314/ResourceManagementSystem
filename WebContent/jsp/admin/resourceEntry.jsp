@@ -238,7 +238,7 @@ tr.hide {
 				+"</iframe>";
 			$('iframe#resourceListIframe').on("load",function(){
 				//为资产列表添加管理资产工具栏
-				window.frames["resourceListIframe"].initEntrtyResourceToolbar();
+				window.frames["resourceListIframe"].hideApplyResourceToolbar();
 			});
 			
 		}
@@ -305,6 +305,7 @@ tr.hide {
 			url = "${ctx}/admin/enterNewResource.do";
 		}
 
+		//编辑资产信息
 		function editResource(row) {
 			$('#dlg').dialog('open').dialog('setTitle', '编辑资产信息');
 			//控制组件的显示与隐藏
@@ -334,6 +335,7 @@ tr.hide {
 			url = "${ctx}/admin/editResource.do";
 		}
 
+		//提交请求
 		function submit() {
 			$('#fm').form('submit', {
 				url : url,
@@ -341,6 +343,8 @@ tr.hide {
 					$('#dlg').dialog('close'); // close the dialog
 					result = JSON.parse(result);
 					if (result.success) {
+						//iframe页面的刷新
+						document.getElementById('resourceListIframe').contentWindow.location.reload(true);
 						$('#dialogInfo').text("操作成功，已成功添加（修改）资产信息！");
 						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
 					} else {
@@ -352,6 +356,7 @@ tr.hide {
 			});
 		}
 		
+		//根据类别显示不同的dialog
 		function componentDisplay(){
 			//SIM卡
 			if(type==<%=ResourceTypeConfig.SIM_CARD%>){

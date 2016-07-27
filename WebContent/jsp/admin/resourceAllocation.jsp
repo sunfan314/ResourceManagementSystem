@@ -184,9 +184,25 @@ h2 {
 					title:'备注信息',
 					width:90
 				}]],
+				onLoadSuccess:function(data){
+					if(data.total==0){
+						//设置没有数据时在表格中进行提示
+						$('#allocationApplicationList').datagrid('appendRow',{
+							id:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
+						});
+						$('#allocationApplicationList').datagrid('mergeCells',{
+							index:0,
+							field:'id',
+							colspan:6
+						});
+					}
+				},
 				//双击显示申请详情
 				onDblClickRow:function(index,row){
 					$('#dlg').dialog('close');
+					if(!row.resource){
+						return;
+					}
 					//显示申请详情信息
 					$('#applicationInfo').show();
 					applicationId=row.id;

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="net.cn.util.ResourceTypeConfig"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
@@ -93,58 +94,74 @@ td.tdStyle {
 
 	<script type="text/javascript">
 		$(function() {
-			$('#dg')
-					.datagrid(
-							{
-								toolbar:'#manageResourceToolbar',
-								view : detailview,
-								detailFormatter : function(index, row) {
-									//SIM卡
-									if (row.type ==<%=ResourceTypeConfig.SIM_CARD%>) {
-										return "<table><tr><th class='thStyle'>手机号码</th><td class='tdStyle'>"
-												+ row.phoneNumber
-												+ "</td></tr><tr><th class='thStyle'>IMSI</th><td class='tdStyle'>"
-												+ row.imsi
-												+ "</td></tr><tr><th class='thStyle'>套餐信息</th><td class='tdStyle'>"
-												+ row.pack
-												+ "</td></tr><tr><th class='thStyle'>密码</th><td class='tdStyle'>"
-												+ row.password
-												+ "</td></tr></table>";
-									}//手机充值卡
-									else if (row.type ==<%=ResourceTypeConfig.PHONE_CARD%>) {
-										return "<table><tr><th class='thStyle'>充值号码</th><td class='tdStyle'>"
-												+ row.phoneNumber
-												+ "</td></tr><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
-												+ row.purchaser
-												+ "</td></tr><tr><th class='thStyle'>领用人</th><td class='tdStyle'>"
-												+ row.owner
-												+ "</td></tr></table>";
-									}//一般消耗品
-									else if (row.fatherType ==<%=ResourceTypeConfig.CONSUMABLE%>) {
-										return "<table><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
-												+ row.purchaser
-												+ "</td></tr><tr><th class='thStyle'>领用人</th><td class='tdStyle'>"
-												+ row.owner
-												+ "</td></tr></table>";
-									}//通用设备
-									else {
-										return "<table><tr><th class='thStyle'>设备型号</th><td class='tdStyle'>"
-												+ row.model
-												+ "</td></tr><tr><th class='thStyle'>追踪码</th><td class='tdStyle'>"
-												+ row.trackingNo
-												+ "</td></tr><tr><th class='thStyle'>IMEI</th><td class='tdStyle'>"
-												+ row.imei
-												+ "</td></tr><tr><th class='thStyle'>序列号</th><td class='tdStyle'>"
-												+ row.serialNo
-												+ "</td></tr></table>";
-									}
-
-								},
-								onDblClickRow : function(index, row) {
-									parent.showResourceLogList(row.id);
-								}
-							});
+			var dataSize="${fn:length(resources)}";
+			if(dataSize==0){
+				//设置没有数据时在表格中进行提示
+				$('#dg').datagrid('appendRow',{
+					id:"<div style='font-weight:bold;text-align:center'>没有相关数据</div>"
+				});
+				$('#dg').datagrid('mergeCells',{
+					index:0,
+					field:'id',
+					colspan:5
+				});
+			}else{
+				initDatagrid();
+			}
 		});
+		
+		//初始化数据表
+		function initDatagrid(){
+			$('#dg').datagrid({
+				toolbar:'#manageResourceToolbar',
+				view : detailview,
+				detailFormatter : function(index, row) {
+					//SIM卡
+					if (row.type ==<%=ResourceTypeConfig.SIM_CARD%>) {
+						return "<table><tr><th class='thStyle'>手机号码</th><td class='tdStyle'>"
+								+ row.phoneNumber
+								+ "</td></tr><tr><th class='thStyle'>IMSI</th><td class='tdStyle'>"
+								+ row.imsi
+								+ "</td></tr><tr><th class='thStyle'>套餐信息</th><td class='tdStyle'>"
+								+ row.pack
+								+ "</td></tr><tr><th class='thStyle'>密码</th><td class='tdStyle'>"
+								+ row.password
+								+ "</td></tr></table>";
+					}//手机充值卡
+					else if (row.type ==<%=ResourceTypeConfig.PHONE_CARD%>) {
+						return "<table><tr><th class='thStyle'>充值号码</th><td class='tdStyle'>"
+								+ row.phoneNumber
+								+ "</td></tr><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
+								+ row.purchaser
+								+ "</td></tr><tr><th class='thStyle'>领用人</th><td class='tdStyle'>"
+								+ row.owner
+								+ "</td></tr></table>";
+					}//一般消耗品
+					else if (row.fatherType ==<%=ResourceTypeConfig.CONSUMABLE%>) {
+						return "<table><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
+								+ row.purchaser
+								+ "</td></tr><tr><th class='thStyle'>领用人</th><td class='tdStyle'>"
+								+ row.owner
+								+ "</td></tr></table>";
+					}//通用设备
+					else {
+						return "<table><tr><th class='thStyle'>设备型号</th><td class='tdStyle'>"
+								+ row.model
+								+ "</td></tr><tr><th class='thStyle'>追踪码</th><td class='tdStyle'>"
+								+ row.trackingNo
+								+ "</td></tr><tr><th class='thStyle'>IMEI</th><td class='tdStyle'>"
+								+ row.imei
+								+ "</td></tr><tr><th class='thStyle'>序列号</th><td class='tdStyle'>"
+								+ row.serialNo
+								+ "</td></tr></table>";
+					}
+				},		
+				//设置双击显示资产使用日志
+				onDblClickRow : function(index, row) {
+					parent.showResourceLogList(row.id);
+				}		
+			});	
+		}
 		
 		//****************职员资产查看--开始*************************
 		//隐藏工具栏

@@ -27,13 +27,15 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 }
 
 .north {
-	height: 60px;
+	height: 80px;
 }
 </style>
 </head>
 <body class="easyui-layout">
-	<div region="north" class="north" title="资产管理系统管理员界面">
-		<h3>
+	<div region="north" class="north" title="资产管理系统管理员界面">	
+		<h2 style="margin-left:10px;display:inline-block;float:left">数字家圆资产管理系统</h2>
+			
+		<h3 style="margin-right:10px;display:inline-block;float:right">
 			欢迎,&nbsp;${uid }&nbsp;&nbsp;&nbsp;<a href="${ctx}/user/login.do">退出登录</a>
 		</h3>
 	</div>

@@ -59,6 +59,10 @@
 					+ "' frameborder='no'  style='width:100%;'"
 					+"onload='this.height=resourceListIframe.document.body.scrollHeight'>"
 					+"</iframe>";
+			$('iframe#resourceListIframe').on("load",function(){
+				//为资产列表添加管理资产工具栏
+				window.frames["resourceListIframe"].hideToolbars();
+			});		
 		}
 		
 		//显示资产使用日志信息
