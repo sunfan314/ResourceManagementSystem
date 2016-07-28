@@ -43,6 +43,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public int getUserAuthority(String uid) {
+		// TODO Auto-generated method stub
+		LDAP ldap=new LDAP();
+		if(ldap.getAdmins().contains(uid)){
+			return UserGroupConfig.ADMIN;
+		}else if(ldap.getManagers().contains(uid)){
+			return UserGroupConfig.MANAGER;
+		}else{
+			return UserGroupConfig.USER;
+		}
+	}
+
+	@Override
 	public List<String> getUserWithResources() {
 		// TODO Auto-generated method stub
 		List<String> userList = new ArrayList<>();

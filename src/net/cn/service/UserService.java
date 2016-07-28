@@ -14,6 +14,12 @@ public interface UserService {
 	 */
 	public boolean login(String uid,String password);
 	
+	/**
+	 * @param uid
+	 * @return	获取用户权限
+	 */
+	public int getUserAuthority(String uid);
+	
 	
 	/**
 	 * @return	获取拥有资产的用户列表

@@ -26,17 +26,17 @@ public class UserValidateInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object arg2) throws Exception {
 		// TODO Auto-generated method stub
-//		String uri=request.getRequestURI();
-//		String ctx=request.getContextPath();
-//		if(!(uri.contains("login.do")||(uri.contains("userLogin.do")))){
-//			HttpSession session=request.getSession();
-//			if(null==session.getAttribute("uid")){
-//				System.out.println("会话过期");
-//				response.sendRedirect(ctx+"/user/login.do");
-//			}else{
-//				System.out.println("会话正常");
-//			}
-//		}
+		String uri=request.getRequestURI();
+		String ctx=request.getContextPath();
+		if(!(uri.contains("login.do")||(uri.contains("userLogin.do")))){
+			HttpSession session=request.getSession();
+			if(null==session.getAttribute("uid")){
+				System.out.println("会话过期");
+				response.sendRedirect(ctx+"/user/login.do");
+			}else{
+				System.out.println("会话正常");
+			}
+		}
 		return true;
 	}
 

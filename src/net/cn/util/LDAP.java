@@ -6,15 +6,29 @@ import java.util.List;
 import com.novell.ldap.LDAPAttributeSet;
 import com.novell.ldap.LDAPConnection;
 import com.novell.ldap.LDAPEntry;
+import com.novell.ldap.LDAPException;
 import com.novell.ldap.LDAPSearchResults;
 
+@SuppressWarnings("all")
 public class LDAP {
-	String MY_HOST = "172.20.20.200";// 访问AD域的IP地址
-	int MY_PORT = 389;// 端口号，默认为389
-	int TIMEOUT = 10000;// 超时设置
-	String searchBase = "dc=kinstalk,dc=com";// 域名入口
-	int searchScope = LDAPConnection.SCOPE_SUB;// 搜索范围
-	String filter = "(|(objectclass=person)(objectclass=user)(objectclass=organizationalPerson))";// 过滤器
+	
+	private LDAPConnection connection;
+	
+	public LDAPConnection getConnectionInstance(){
+		if(connection==null){
+			connection=new LDAPConnection();	
+			//设置超时时间
+			connection.setSocketTimeOut(LDAPConfig.TIMEOUT);
+			//设置服务器地址和端口号
+			try {
+				connection.connect(LDAPConfig.HOST,LDAPConfig.PORT);
+			} catch (LDAPException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return connection;
+	}
 
 	/**
 	 * @param uid
@@ -24,12 +38,11 @@ public class LDAP {
 	public List<String> getUserDN(String uid) throws Exception {
 		List<String> result = new ArrayList<String>();
 
-		LDAPConnection ld = new LDAPConnection();
-		ld.setSocketTimeOut(TIMEOUT);
-		ld.connect(MY_HOST, MY_PORT);
-		ld.bind(null, null);// 匿名登录
+		LDAPConnection conn = this.getConnectionInstance();
+		//匿名登录
+		conn.bind(null, null);
 
-		LDAPSearchResults searchResults = ld.search(searchBase, searchScope, filter, null, false);
+		LDAPSearchResults searchResults = conn.search(LDAPConfig.USER_SEARCH_BASE, LDAPConfig.SEARCH_SCOPE, LDAPConfig.USER_FILTER, null, false);
 
 		while (searchResults.hasMore()) {
 			LDAPEntry nextEntry = searchResults.next();
@@ -52,11 +65,9 @@ public class LDAP {
 			return false;
 		}
 		try {
-			LDAPConnection ld = new LDAPConnection();
-			ld.setSocketTimeOut(TIMEOUT);// 设置超时
-			ld.connect(MY_HOST, MY_PORT);
-			ld.bind(userDN, password);
-			return ld.isConnected();
+			LDAPConnection conn = this.getConnectionInstance();
+			conn.bind(userDN, password);
+			return conn.isConnected();
 		} catch (Exception e) {
 			// TODO: handle exception
 			return false;
@@ -88,12 +99,11 @@ public class LDAP {
 	public List<String> getUsers() {
 		List<String> result = new ArrayList<String>();
 		try {
-			LDAPConnection ld = new LDAPConnection();
-			ld.setSocketTimeOut(TIMEOUT);
-			ld.connect(MY_HOST, MY_PORT);
-			ld.bind(null, null);// 匿名登录
+			LDAPConnection conn = this.getConnectionInstance();
+			// 匿名登录
+			conn.bind(null, null);
 
-			LDAPSearchResults searchResults = ld.search(searchBase, searchScope, filter, null, false);
+			LDAPSearchResults searchResults = conn.search(LDAPConfig.USER_SEARCH_BASE, LDAPConfig.SEARCH_SCOPE, LDAPConfig.USER_FILTER, null, false);
 
 			while (searchResults.hasMore()) {
 				LDAPEntry nextEntry = searchResults.next();
@@ -107,6 +117,56 @@ public class LDAP {
 			return result;
 		}
 
+	}
+	
+	/**
+	 * @return	获取管理员列表
+	 */
+	public List<String> getAdmins(){
+		List<String> result = new ArrayList<String>();
+		try {
+			LDAPConnection conn =this.getConnectionInstance();
+			// 匿名登录
+			conn.bind(null, null);
+
+			LDAPSearchResults searchResults = conn.search(LDAPConfig.ADMIN_SEARCH_BASE, LDAPConfig.SEARCH_SCOPE, LDAPConfig.GROUP_FILTER, null, false);
+
+			while (searchResults.hasMore()) {
+				LDAPEntry nextEntry = searchResults.next();
+				LDAPAttributeSet attributeSet = nextEntry.getAttributeSet();
+				String entryUid = attributeSet.getAttribute("memberUid").getStringValue();
+				result.add(entryUid);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			return result;
+		}
+	}
+	
+	/**	
+	 * @return	获取经理列表
+	 */
+	public List<String> getManagers(){
+		List<String> result = new ArrayList<String>();
+		try {
+			LDAPConnection conn = this.getConnectionInstance();
+			// 匿名登录
+			conn.bind(null, null);
+
+			LDAPSearchResults searchResults = conn.search(LDAPConfig.MANAGER_SEARCH_BASE, LDAPConfig.SEARCH_SCOPE, LDAPConfig.GROUP_FILTER, null, false);
+
+			while (searchResults.hasMore()) {
+				LDAPEntry nextEntry = searchResults.next();
+				LDAPAttributeSet attributeSet = nextEntry.getAttributeSet();
+				String entryUid = attributeSet.getAttribute("memberUid").getStringValue();
+				result.add(entryUid);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		} finally {
+			return result;
+		}
 	}
 
 }
