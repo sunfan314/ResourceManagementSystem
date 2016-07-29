@@ -174,15 +174,29 @@ public class UserServiceImpl implements UserService {
 		}
 
 	}
+	
+	@Override
+	public void createResourcePurchaseApplication(PurchaseApplication application) {
+		// TODO Auto-generated method stub
+		PurchaseApplication purchaseApplication=new PurchaseApplication(application);
+		Flow flow=(Flow)baseDao.get(Flow.class, ApplicationFlowConfig.MANAGER_ADMIN_FLOW);
+		purchaseApplication.setFlow(flow);
+		baseDao.save(purchaseApplication);
+	}
 
-	
-	
 	@Override
 	public Application getApplicationInfo(int applicationId) {
 		// TODO Auto-generated method stub
 		Application application=(Application)baseDao.get(Application.class, applicationId);
 		Resource resource=(Resource)baseDao.get(Resource.class, application.getRid());
 		application.setResource(resource);
+		return application;
+	}
+	
+	@Override
+	public PurchaseApplication getPurchaseApplicationInfo(int applicationId) {
+		// TODO Auto-generated method stub
+		PurchaseApplication application=(PurchaseApplication)baseDao.get(PurchaseApplication.class, applicationId);
 		return application;
 	}
 
@@ -227,6 +241,12 @@ public class UserServiceImpl implements UserService {
 		params.add(0);//申请未结束
 		List<Application> list=baseDao.find("from Application where receiver = ? and type = ? and step = ? and finished = ?",params);
 		return setApplicationResource(list);//为申请绑定对应的资产信息
+	}
+
+	@Override
+	public List<PurchaseApplication> getResourcePurchaseApplications(String uid) {
+		// TODO Auto-generated method stub
+		return baseDao.find("from PurchaseApplication where user = ?",uid);
 	}
 
 	@Override

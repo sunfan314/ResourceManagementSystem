@@ -11,6 +11,7 @@ import net.cn.model.ApplicationApproval;
 import net.cn.model.Log;
 import net.cn.model.Property;
 import net.cn.model.PurchaseApplication;
+import net.cn.model.PurchaseApplicationApproval;
 import net.cn.model.Resource;
 import net.cn.model.Type;
 import net.cn.service.AdminService;
@@ -73,9 +74,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Application> getResourcePurchaseApplications() {
+	public List<PurchaseApplication> getResourcePurchaseApplications() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Object> params=new ArrayList<>();
+		params.add(flowService.getStepInFlow(ApplicationFlowConfig.MANAGER_ADMIN_FLOW, UserGroupConfig.ADMIN));
+		params.add(0);//申请未结束
+		return baseDao.find("from PurchaseApplication where step = ? and finished = ?", params);
 	}
 
 	@Override
@@ -176,6 +180,31 @@ public class AdminServiceImpl implements AdminService {
 		baseDao.update(application);//结束资产转移申请
 	}
 	
+	@Override
+	public void agreeResourcePurchaseApplication(int applicationId, String uid) {
+		// TODO Auto-generated method stub
+		int step=flowService.getStepInFlow(ApplicationFlowConfig.MANAGER_ADMIN_FLOW, UserGroupConfig.ADMIN);
+		PurchaseApplicationApproval approval=new PurchaseApplicationApproval(applicationId, step, uid, 0, "");
+		baseDao.save(approval);//添加审核信息
+		
+		PurchaseApplication application=(PurchaseApplication)baseDao.get(PurchaseApplication.class, applicationId);
+		application.setFinished(1);
+		baseDao.update(application);//修改申请信息，流程进入下一步
+	}
+
+	@Override
+	public void refuseResourcePurchaseApplication(int applicationId, String uid, String remark) {
+		// TODO Auto-generated method stub
+		int step=flowService.getStepInFlow(ApplicationFlowConfig.MANAGER_ADMIN_FLOW, UserGroupConfig.ADMIN);
+		PurchaseApplicationApproval approval=new PurchaseApplicationApproval(applicationId, step, uid, 1, remark);
+		baseDao.save(approval);//添加审核信息
+		
+		PurchaseApplication application=(PurchaseApplication)baseDao.get(PurchaseApplication.class, applicationId);
+		application.setFinished(1);
+		application.setRefused(1);
+		baseDao.update(application);//结束资产购买申请
+	}
+
 	/**
 	 * 设置申请对应的资产信息
 	 * 

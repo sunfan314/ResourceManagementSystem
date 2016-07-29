@@ -82,7 +82,12 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 					attributes : {
 						url : "${ctx}/admin/resourceCallback.do"
 					}
-				} ]
+				}, {
+					text : "资产购买申请",
+					attributes : {
+						url : "${ctx}/admin/resourcePurchase.do"
+					}
+				}]
 			} ]
 		}, {
 			text : "用户权限",

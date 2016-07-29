@@ -34,7 +34,7 @@ public interface AdminService {
 	/**
 	 * @return	获取资产购买申请列表
 	 */
-	public List<Application> getResourcePurchaseApplications();
+	public List<PurchaseApplication> getResourcePurchaseApplications();
 	
 	
 	/**
@@ -66,5 +66,20 @@ public interface AdminService {
 	 * @param remark
 	 */
 	public void refuseResourceCallbackApplication(int applicationId,String uid,String remark);
+	
+	/**
+	 * 同意资产购买申请
+	 * @param applicationId
+	 * @param uid
+	 */
+	public void agreeResourcePurchaseApplication(int applicationId,String uid);
+	
+	/**
+	 * 拒绝资产购买申请
+	 * @param applicationId
+	 * @param uid
+	 * @param remark
+	 */
+	public void refuseResourcePurchaseApplication(int applicationId,String uid,String remark);
 
 }

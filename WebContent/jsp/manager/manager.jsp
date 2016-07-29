@@ -72,7 +72,7 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 				}, {
 					text : "×Ê²ú¹ºÂòÉêÇë",
 					attributes : {
-						url : ""
+						url : "${ctx}/manager/resourcePurchase.do"
 					}
 				} ]
 			} ]

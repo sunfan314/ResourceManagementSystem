@@ -11,6 +11,7 @@ import net.cn.dao.BaseDao;
 import net.cn.model.Application;
 import net.cn.model.ApplicationApproval;
 import net.cn.model.PurchaseApplication;
+import net.cn.model.PurchaseApplicationApproval;
 import net.cn.model.Resource;
 import net.cn.model.Type;
 import net.cn.service.FlowService;
@@ -42,7 +43,10 @@ public class ManagerServiceImpl implements ManagerService{
 	@Override
 	public List<PurchaseApplication> getResourcePurchaseApplications() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Object> params=new ArrayList<>();
+		params.add(flowService.getStepInFlow(ApplicationFlowConfig.MANAGER_ADMIN_FLOW, UserGroupConfig.MANAGER));
+		params.add(0);//申请未结束
+		return baseDao.find("from PurchaseApplication where step = ? and finished = ?", params);
 	}
 
 	@Override
@@ -60,9 +64,15 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 
 	@Override
-	public void agreeResourcePurchaseApplication(PurchaseApplication application) {
+	public void agreeResourcePurchaseApplication(int applicationId,String uid) {
 		// TODO Auto-generated method stub
+		int step=flowService.getStepInFlow(ApplicationFlowConfig.MANAGER_ADMIN_FLOW, UserGroupConfig.MANAGER);
+		PurchaseApplicationApproval approval=new PurchaseApplicationApproval(applicationId, step, uid, 0, "");
+		baseDao.save(approval);//添加审核信息
 		
+		PurchaseApplication application=(PurchaseApplication)baseDao.get(PurchaseApplication.class, applicationId);
+		application.setStep(step+1);
+		baseDao.update(application);//修改申请信息，流程进入下一步
 	}
 
 	@Override
@@ -80,9 +90,16 @@ public class ManagerServiceImpl implements ManagerService{
 	}
 
 	@Override
-	public void refuseResourcePurchaseApplication(PurchaseApplication application) {
+	public void refuseResourcePurchaseApplication(int applicationId,String uid,String remark) {
 		// TODO Auto-generated method stub
+		int step=flowService.getStepInFlow(ApplicationFlowConfig.MANAGER_ADMIN_FLOW, UserGroupConfig.MANAGER);
+		PurchaseApplicationApproval approval=new PurchaseApplicationApproval(applicationId, step, uid, 1, remark);
+		baseDao.save(approval);//添加审核信息
 		
+		PurchaseApplication application=(PurchaseApplication)baseDao.get(PurchaseApplication.class, applicationId);
+		application.setFinished(1);
+		application.setRefused(1);
+		baseDao.update(application);//结束资产购买申请
 	}
 	
 	/**

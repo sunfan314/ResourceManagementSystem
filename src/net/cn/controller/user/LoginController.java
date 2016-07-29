@@ -58,52 +58,34 @@ public class LoginController {
 	@RequestMapping("/userLogin")
 	public ModelAndView userLogin(@RequestParam("uid") String uid, @RequestParam("password") String password,HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
-		if(userService.login(uid, password)){
-			session.setAttribute("uid", uid);
-			session.setMaxInactiveInterval(60*60*6);
-//			modelAndView.setViewName("login/success");
-			int type=userService.getUserAuthority(uid);
-			if(type==UserGroupConfig.MANAGER){
-				modelAndView.setViewName("manager/manager");
-			}else if(type==UserGroupConfig.ADMIN){
-				modelAndView.setViewName("admin/admin");
-			}else{
-				modelAndView.setViewName("user/user");
-			}
-		}else{
-			modelAndView.setViewName("login/fail");
-		}
-		/*测试用
+//		if(userService.login(uid, password)){
+//			session.setAttribute("uid", uid);
+//			session.setMaxInactiveInterval(60*60*6);
+//			//用户权限验证
+//			int type=userService.getUserAuthority(uid);
+//			if(type==UserGroupConfig.MANAGER){
+//				modelAndView.setViewName("manager/manager");
+//			}else if(type==UserGroupConfig.ADMIN){
+//				modelAndView.setViewName("admin/admin");
+//			}else{
+//				modelAndView.setViewName("user/user");
+//			}
+//		}else{
+//			modelAndView.setViewName("login/fail");
+//		}
+		
 		session.setAttribute("uid", uid);
-		session.setMaxInactiveInterval(5);	
+//		session.setMaxInactiveInterval(5);	
 		if(uid.equals("admin")){
 			modelAndView.setViewName("admin/admin");
 		}else if(uid.equals("manager")){
 			modelAndView.setViewName("manager/manager");
 		}else{
 			modelAndView.setViewName("user/user");
-		}
-		*/
+		}	
 		return modelAndView;
 	}
 	
-	@RequestMapping("/test")
-	public ModelAndView test(){
-		ModelAndView modelAndView=new ModelAndView();
-		modelAndView.setViewName("user/test");
-		return modelAndView;
-	}
 	
-	@RequestMapping("/getUsers")
-	public @ResponseBody List<Property> getUsers(){
-		List<Property> list=new ArrayList<>();
-		LDAP ldap=new LDAP();
-		List<String> users=ldap.getUsers();
-		for (String str : users) {
-			Property property=new Property(str, str);
-			list.add(property);
-		}
-		return list;
-	}
 
 }

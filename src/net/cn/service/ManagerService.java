@@ -29,7 +29,7 @@ public interface ManagerService {
 	 * @param request
 	 * 批准资产购买申请
 	 */
-	public void agreeResourcePurchaseApplication(PurchaseApplication application);
+	public void agreeResourcePurchaseApplication(int applicationId,String uid);
 	
 	
 	/**
@@ -43,6 +43,6 @@ public interface ManagerService {
 	 * @param request
 	 * 拒绝资产购买申请
 	 */
-	public void refuseResourcePurchaseApplication(PurchaseApplication application);
+	public void refuseResourcePurchaseApplication(int applicationId,String uid,String remark);
 
 }

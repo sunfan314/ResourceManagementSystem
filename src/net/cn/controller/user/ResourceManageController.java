@@ -72,7 +72,6 @@ public class ResourceManageController {
 		LDAP ldap=new LDAP();
 		List<String> userList=ldap.getUsers();
 		if(!userList.contains(receiver)){//接收用户不存在
-//		if(!true){
 			map.put("receiverExists", false);
 			map.put("success",false);
 		}else{

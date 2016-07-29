@@ -81,7 +81,7 @@ td.tdStyle {
 		</div>
 	</div>
 
-	<div data-options="region:'east'" style="width: 35%" title="申请详情">
+	<div data-options="region:'east'" style="width: 40%" title="申请详情">
 		<div id="applicationDiv"
 			style="margin-left:-10px;margin-right: 40px; margin-top: 40px;display:none;">
 			<table id="applicationDetailInfo" class="tableStyle">

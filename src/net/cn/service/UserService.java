@@ -3,6 +3,7 @@ package net.cn.service;
 import java.util.List;
 import net.cn.model.Application;
 import net.cn.model.Property;
+import net.cn.model.PurchaseApplication;
 
 
 public interface UserService {
@@ -62,10 +63,22 @@ public interface UserService {
 	public boolean createResourceReturnApplication(int rid,String uid,String remark);
 	
 	/**
+	 * 创建资产购买申请
+	 * @param application
+	 */
+	public void createResourcePurchaseApplication(PurchaseApplication application);
+	
+	/**
 	 * @param applicationId
 	 * @return	获取申请的详细信息
 	 */
 	public Application getApplicationInfo(int applicationId);
+	
+	/**
+	 * @param applicationId
+	 * @return	获取购买申请的详细信息
+	 */
+	public PurchaseApplication getPurchaseApplicationInfo(int applicationId);
 	
 	/**
 	 * @param uid
@@ -90,6 +103,12 @@ public interface UserService {
 	 * @return	获得用户收到的资产转移申请（未处理的）
 	 */
 	public List<Application> getReceivedResourceTransferApplication(String uid);
+	
+	/**
+	 * @param uid
+	 * @return	获得用户发起的资产购买申请
+	 */
+	public List<PurchaseApplication> getResourcePurchaseApplications(String uid);
 	
 	/**
 	 * @param applicationId
