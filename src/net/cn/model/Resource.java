@@ -75,9 +75,7 @@ public class Resource {
 	
 	private String password;
 	
-	@OneToMany
-	@JoinColumn(name="rid")
-	private List<Log> logs;
+	
 	
 	public int getId() {
 		return id;
@@ -229,12 +227,5 @@ public class Resource {
 		this.password = password;
 	}
 
-	public List<Log> getLogs() {
-		return logs;
-	}
-
-	public void setLogs(List<Log> logs) {
-		this.logs = logs;
-	}
 
 }

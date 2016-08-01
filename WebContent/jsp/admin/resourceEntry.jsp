@@ -345,8 +345,8 @@ tr.hide {
 					if (result.success) {
 						//iframe页面的刷新
 						document.getElementById('resourceListIframe').contentWindow.location.reload(true);
-						$('#dialogInfo').text("操作成功，已成功添加（修改）资产信息！");
-						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
+						//$('#dialogInfo').text("操作成功，已成功添加（修改）资产信息");
+						//$('#info-dlg').dialog('open').dialog('setTitle', '成功');
 					} else {
 						$('#dialogInfo').text("操作失败，资产拥有人不存在，请在列表中选择资产拥有人！");
 						$('#info-dlg').dialog('open').dialog('setTitle', '失败');

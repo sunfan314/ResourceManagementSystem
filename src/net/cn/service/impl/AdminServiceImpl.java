@@ -38,11 +38,19 @@ public class AdminServiceImpl implements AdminService {
 	public void addNewResource(Resource resource) {
 		// TODO Auto-generated method stub
 		//获取最大id
-		int id=(Integer)baseDao.find("select max(id) from Resource").get(0)+1;
+		List<Integer> list=baseDao.find("select max(id) from Resource");
+		int id;
+		if(list.size()>0){
+			id=list.get(0)+1;
+		}else{
+			//数据库中没有资产数据时，第一条添加的资产id设置为1
+			id=1;
+		}
 		resource.setId(id);
 		baseDao.save(resource);
 		Log log=new Log(id, resource.getOwner(), resource.getEntryDate(), resource.getRemark());
 		baseDao.save(log);
+		
 	}
 
 	@Override
