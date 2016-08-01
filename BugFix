@@ -1,0 +1,4 @@
+Bug日志信息：
+Bug1.1	主页面刷新问题
+问题描述：session过期后主页面刷新时显示缺少参数
+解决方案：在对应controller下先对参数判断是否为null，如果uid或password为null则跳转至登录界面
