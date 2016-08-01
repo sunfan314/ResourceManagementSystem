@@ -56,8 +56,13 @@ public class LoginController {
 	 * @return	根据用户名和密码进行用户验证
 	 */
 	@RequestMapping("/userLogin")
-	public ModelAndView userLogin(@RequestParam("uid") String uid, @RequestParam("password") String password,HttpSession session) {
-		ModelAndView modelAndView = new ModelAndView();
+	public ModelAndView userLogin(String uid, String password,HttpSession session) {
+		ModelAndView modelAndView=new ModelAndView();
+		//在session和cookie失效之后刷新主页面时跳转到登录界面
+		if(uid==null||password==null){	
+			modelAndView.setViewName("login/login");
+			return modelAndView;
+		}
 //		if(userService.login(uid, password)){
 //			session.setAttribute("uid", uid);
 //			session.setMaxInactiveInterval(60*60*6);
@@ -72,8 +77,7 @@ public class LoginController {
 //			}
 //		}else{
 //			modelAndView.setViewName("login/fail");
-//		}
-		
+//		}		
 		session.setAttribute("uid", uid);
 //		session.setMaxInactiveInterval(5);	
 		if(uid.equals("admin")){
