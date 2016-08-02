@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="net.cn.util.ResourceTypeConfig" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
@@ -288,10 +286,8 @@ tr.hide {
 			//由于id传递到后台的resource对象属性中，所以不能是空字符，传入0在后台进行处理
 			$('#id').val(0);
 			$('#type').val(type);
-			<%SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-			String time = df.format(new Date());%>
 			//设置入库时间为当前时间
-			$('#entryDate').val("<%=time%>");
+			$('#entryDate').val(getTime());
 			//设置资产状态为正常状态
 			$('#status').combobox('setValue', 0);
 			//设置资产拥有人为仓库
@@ -412,6 +408,30 @@ tr.hide {
 				$('#packTr').addClass("hide");
 				$('#passwordTr').addClass("hide");
 				$('#ownerTd').html("资产拥有人");
+			}
+		}
+		
+		//显示当前时间
+		function getTime(){
+			var date = new Date();
+			var year=date.getFullYear();
+			//月份的显示范围为0-11
+			var month=format(date.getMonth()+1);		
+			var day=format(date.getDay());
+			var hour=format(date.getHours());
+			var minute=format(date.getMinutes());
+			var second=format(date.getSeconds());
+			var timeStr=year+"/"+month+"/"+day+" "+hour+":"+minute+":"+second;
+			return timeStr;
+			//window.setTimeout("getTime()",1000);
+		}
+		
+		//对日期显示格式化
+		function format(value){
+			if(value<10){
+				return "0"+value;
+			}else{
+				return value;
 			}
 		}
 		
