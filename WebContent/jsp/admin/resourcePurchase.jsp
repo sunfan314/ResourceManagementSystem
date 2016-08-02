@@ -69,7 +69,7 @@ h2 {
 				data-options="url:'${ctx}/admin/getResourcePurchaseApplications.do',fitColumns:true,singleSelect:true">
 				<thead>
 					<tr>
-						<th data-options="field:'id',width:20">申请标识</th>
+						<th data-options="field:'id',width:20,hidden:true">申请标识</th>
 						<th data-options="field:'name',width:40">物品名称</th>
 						<th data-options="field:'number',width:40">物品数量</th>
 						<th data-options="field:'description',width:80">申购描述</th>
@@ -160,19 +160,19 @@ h2 {
 					if(data.total==0){
 						//设置没有数据时在表格中进行提示
 						$('#dg').datagrid('appendRow',{
-							id:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
+							name:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
 						});
 						$('#dg').datagrid('mergeCells',{
 							index:0,
-							field:'id',
-							colspan:6
+							field:'name',
+							colspan:5
 						});
 					}
 				},
 				//双击显示申请详情
 				onDblClickRow:function(index,row){
 					$('#dlg').dialog('close');
-					if(!row.name){
+					if(!row.number){
 						return;
 					}
 					applicationId=row.id;

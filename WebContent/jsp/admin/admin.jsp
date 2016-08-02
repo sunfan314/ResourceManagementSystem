@@ -100,7 +100,7 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 						url : "${ctx}/user/companyResources.do"
 					}
 				}, {
-					text : "个人资产查看",
+					text : "职员资产查看",
 					attributes : {
 						url : "${ctx}/user/personalResources.do"
 					}

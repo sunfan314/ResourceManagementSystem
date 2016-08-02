@@ -154,16 +154,8 @@ h2 {
 				columns : [ [ {
 					field : 'id',
 					title : '申请标识',
-					width : 40
-				}, {
-					field : 'resource',
-					title : '资产类型',
-					width : 60,
-					formatter : function(value, row, index) {
-						if (value) {
-							return value.type.name;
-						}
-					}
+					width : 40,
+					hidden:true
 				}, {
 					field : 'resourceName',
 					title : '资产名称',
@@ -180,17 +172,26 @@ h2 {
 					field : 'remark',
 					title : '备注信息',
 					width : 90
+				}, {
+					field : 'resource',
+					title : '资产类型',
+					width : 60,
+					formatter : function(value, row, index) {
+						if (value) {
+							return value.type.name;
+						}
+					}
 				} ] ],
 				onLoadSuccess:function(data){
 					if(data.total==0){
 						//设置没有数据时在表格中进行提示
 						$('#allocationApplicationList').datagrid('appendRow',{
-							id:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
+							resourceName:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
 						});
 						$('#allocationApplicationList').datagrid('mergeCells',{
 							index:0,
-							field:'id',
-							colspan:6
+							field:'resourceName',
+							colspan:5
 						});
 
 					}

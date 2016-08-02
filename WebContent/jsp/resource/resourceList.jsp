@@ -38,10 +38,11 @@ td {
 			data-options="fitColumns:true,singleSelect:true">
 			<thead>
 				<tr>
-					<th data-options="field:'id',width:30">资产标识</th>
+					<th data-options="field:'id',width:30,hidden:true">资产标识</th>
 					<th data-options="field:'name',width:50">资产名称</th>
 					<th data-options="field:'model',width:50">资产型号</th>
 					<th data-options="field:'trackingNo',width:50">追踪码</th>
+					<th data-options="field:'trackingNo2',width:50">对外追踪码</th>
 					<th data-options="field:'imei',width:50">IMEI</th>
 					<th data-options="field:'serialNo',width:50">序列号</th>
 					<th data-options="field:'phoneNumber',width:50"><c:choose>
@@ -82,6 +83,7 @@ td {
 						<td>${r.name}</td>
 						<td>${r.model}</td>
 						<td>${r.trackingNo}</td>
+						<td>${r.trackingNo2}</td>
 						<td>${r.imei}</td>
 						<td>${r.serialNo}</td>
 						<td>${r.phoneNumber}</td>
@@ -131,12 +133,14 @@ td {
 			if (type == SIM_CARD) {
 				$('#dg').datagrid('hideColumn', 'model');
 				$('#dg').datagrid('hideColumn', 'trackingNo');
+				$('#dg').datagrid('hideColumn', 'trackingNo2');
 				$('#dg').datagrid('hideColumn', 'imei');
 				$('#dg').datagrid('hideColumn', 'serialNo');
 				$('#dg').datagrid('hideColumn', 'purchaser');
 			} else if (type == PHONE_CARD) {
 				$('#dg').datagrid('hideColumn', 'model');
 				$('#dg').datagrid('hideColumn', 'trackingNo');
+				$('#dg').datagrid('hideColumn', 'trackingNo2');
 				$('#dg').datagrid('hideColumn', 'imei');
 				$('#dg').datagrid('hideColumn', 'serialNo');
 				$('#dg').datagrid('hideColumn', 'imsi');
@@ -146,6 +150,7 @@ td {
 			} else if (fatherType == CONSUMABLE) {
 				$('#dg').datagrid('hideColumn', 'model');
 				$('#dg').datagrid('hideColumn', 'trackingNo');
+				$('#dg').datagrid('hideColumn', 'trackingNo2');
 				$('#dg').datagrid('hideColumn', 'imei');
 				$('#dg').datagrid('hideColumn', 'serialNo');
 				$('#dg').datagrid('hideColumn', 'phoneNumber');
@@ -164,11 +169,11 @@ td {
 			if(dataSize==0){
 				//设置没有数据时在表格中进行提示
 				$('#dg').datagrid('appendRow',{
-					id:"<div style='font-weight:bold;margin-left:400px;'>没有相关数据</div>"
+					name:"<div style='font-weight:bold;margin-left:400px;'>没有相关数据</div>"
 				});
 				$('#dg').datagrid('mergeCells',{
 					index:0,
-					field:'id',
+					field:'name',
 					colspan:16
 				});
 			}else{

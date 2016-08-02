@@ -65,7 +65,7 @@ td.tdStyle {
 				data-options="toolbar:'#toolbar',fitColumns:true,singleSelect:true">
 				<thead>
 					<tr>
-						<th data-options="field:'id',width:20">申请标识</th>
+						<th data-options="field:'id',width:20,hidden:true">申请标识</th>
 						<th data-options="field:'name',width:40">物品名称</th>
 						<th data-options="field:'number',width:40">物品数量</th>
 						<th data-options="field:'description',width:80">申购描述</th>
@@ -194,12 +194,12 @@ td.tdStyle {
 			if (dataSize == 0) {
 				//设置没有数据时在表格中进行提示
 				$('#dg').datagrid('appendRow',{
-					id : "<div style='font-weight:bold;text-align:center'>没有相关数据</div>"
+					name : "<div style='font-weight:bold;text-align:center'>没有相关数据</div>"
 				});
 				$('#dg').datagrid('mergeCells', {
 					index : 0,
-					field : 'id',
-					colspan : 6
+					field : 'name',
+					colspan : 5
 				});
 			} else {
 				initDatagrid();
@@ -347,7 +347,6 @@ td.tdStyle {
 					if (result.success) {
 						$('#dialogInfo').text("请求提交成功！");
 						$('#info-dlg').dialog('open').dialog('setTitle', '成功');
-
 					} else {
 						$('#dialogInfo').text("请求提交失败，服务器异常！");
 						$('#info-dlg').dialog('open').dialog('setTitle', '失败');

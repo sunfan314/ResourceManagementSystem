@@ -17,6 +17,7 @@ import javax.persistence.Transient;
  * name 		资产名 
  * model 		资产型号 
  * trackingNo 	资产追踪码 
+ * trackingNo2	外借设备追踪码
  * IMEI 		移动设备标识码
  * serialNo 	资产序列号 
  * entryDate 	资产入库日期 
@@ -41,6 +42,8 @@ public class Resource {
 	private String model;
 
 	private String trackingNo;
+	
+	private String trackingNo2;
 
 	@Column(name = "IMEI")
 	private String imei;
@@ -75,8 +78,6 @@ public class Resource {
 	
 	private String password;
 	
-	
-	
 	public int getId() {
 		return id;
 	}
@@ -107,6 +108,14 @@ public class Resource {
 
 	public void setTrackingNo(String trackingNo) {
 		this.trackingNo = trackingNo;
+	}
+
+	public String getTrackingNo2() {
+		return trackingNo2;
+	}
+
+	public void setTrackingNo2(String trackingNo2) {
+		this.trackingNo2 = trackingNo2;
 	}
 
 	public String getImei() {

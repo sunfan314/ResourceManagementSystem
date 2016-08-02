@@ -32,7 +32,7 @@ td {
 		data-options="fitColumns:true,singleSelect:true">
 		<thead>
 			<tr>
-				<th data-options="field:'id',width:35">日志标识</th>
+				<th data-options="field:'id',width:35,hidden:true">日志标识</th>
 				<th data-options="field:'owner',width:50,formatter:userFormatter">拥有人</th>
 				<th data-options="field:'startTime',width:70">开始时间</th>
 				<th data-options="field:'endTime',width:70">结束时间</th>
@@ -58,12 +58,12 @@ td {
 			if(dataSize==0){
 				//设置没有数据时在表格中进行提示
 				$('#dg').datagrid('appendRow',{
-					id:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
+					owner:"<div style='font-weight:bold;text-align:center;'>没有相关数据</div>"
 				});
 				$('#dg').datagrid('mergeCells',{
 					index:0,
-					field:'id',
-					colspan:5
+					field:'owner',
+					colspan:4
 				});
 			}
 		});

@@ -22,6 +22,11 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/easyui/expand/datagrid-detailview.js"></script>
 <style>
+table.tbStyle {
+	margin-top:5px;
+	margin-bottom:10px;
+	border-spacing:5px;
+}
 th.thStyle {
 	text-align: left;
 	padding-left: 20px;
@@ -40,7 +45,7 @@ td.tdStyle {
 			data-options="fitColumns:true,singleSelect:true">
 			<thead>
 				<tr>
-					<th data-options="field:'id',width:30">资产标识</th>
+					<th data-options="field:'id',width:30,hidden:true">资产标识</th>
 					<th data-options="field:'name',width:50">资产名称</th>
 					<th data-options="field:'entryDate',width:50">入库时间</th>
 					<th data-options="field:'statusValue',width:40">资产状态</th>
@@ -49,6 +54,7 @@ td.tdStyle {
 					<th data-options="field:'fatherType',hidden:true">资产父类别</th>
 					<th data-options="field:'model',hidden:true">资产型号</th>
 					<th data-options="field:'trackingNo',hidden:true">追踪码</th>
+					<th data-options="field:'trackingNo2',hidden:true">对外追踪码</th>
 					<th data-options="field:'imei',hidden:true">IMEI</th>
 					<th data-options="field:'serialNo',hidden:true">序列号</th>
 					<th data-options="field:'phoneNumber',hidden:true">手机号码</th>
@@ -71,6 +77,7 @@ td.tdStyle {
 						<td>${r.type.fatherType}</td>
 						<td>${r.model}</td>
 						<td>${r.trackingNo}</td>
+						<td>${r.trackingNo2}</td>
 						<td>${r.imei}</td>
 						<td>${r.serialNo}</td>
 						<td>${r.phoneNumber}</td>
@@ -98,12 +105,12 @@ td.tdStyle {
 			if(dataSize==0){
 				//设置没有数据时在表格中进行提示
 				$('#dg').datagrid('appendRow',{
-					id:"<div style='font-weight:bold;text-align:center'>没有相关数据</div>"
+					name:"<div style='font-weight:bold;text-align:center'>没有相关数据</div>"
 				});
 				$('#dg').datagrid('mergeCells',{
 					index:0,
-					field:'id',
-					colspan:5
+					field:'name',
+					colspan:4
 				});
 			}else{
 				initDatagrid();
@@ -118,7 +125,7 @@ td.tdStyle {
 				detailFormatter : function(index, row) {
 					//SIM卡
 					if (row.type ==<%=ResourceTypeConfig.SIM_CARD%>) {
-						return "<table><tr><th class='thStyle'>手机号码</th><td class='tdStyle'>"
+						return "<table class='tbStyle'><tr><th class='thStyle'>手机号码</th><td class='tdStyle'>"
 								+ row.phoneNumber
 								+ "</td></tr><tr><th class='thStyle'>IMSI</th><td class='tdStyle'>"
 								+ row.imsi
@@ -129,7 +136,7 @@ td.tdStyle {
 								+ "</td></tr></table>";
 					}//手机充值卡
 					else if (row.type ==<%=ResourceTypeConfig.PHONE_CARD%>) {
-						return "<table><tr><th class='thStyle'>充值号码</th><td class='tdStyle'>"
+						return "<table class='tbStyle'><tr><th class='thStyle'>充值号码</th><td class='tdStyle'>"
 								+ row.phoneNumber
 								+ "</td></tr><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
 								+ row.purchaser
@@ -138,22 +145,24 @@ td.tdStyle {
 								+ "</td></tr></table>";
 					}//一般消耗品
 					else if (row.fatherType ==<%=ResourceTypeConfig.CONSUMABLE%>) {
-						return "<table><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
+						return "<table class='tbStyle'><tr><th class='thStyle'>购买人</th><td class='tdStyle'>"
 								+ row.purchaser
 								+ "</td></tr><tr><th class='thStyle'>领用人</th><td class='tdStyle'>"
 								+ row.owner
 								+ "</td></tr></table>";
 					}//通用设备
 					else {
-						return "<table><tr><th class='thStyle'>设备型号</th><td class='tdStyle'>"
+						return "<table class='tbStyle'><tr><th class='thStyle'>设备型号</th><td class='tdStyle'>"
 								+ row.model
 								+ "</td></tr><tr><th class='thStyle'>追踪码</th><td class='tdStyle'>"
 								+ row.trackingNo
+								+"</td></tr><tr><th class='thStyle'>对外追踪码</th><td class='tdStyle'>"
+								+ row.trackingNo2
 								+ "</td></tr><tr><th class='thStyle'>IMEI</th><td class='tdStyle'>"
 								+ row.imei
 								+ "</td></tr><tr><th class='thStyle'>序列号</th><td class='tdStyle'>"
 								+ row.serialNo
-								+ "</td></tr></table>";
+								+ "</td></tr></table></div>";
 					}
 				},		
 				//设置双击显示资产使用日志

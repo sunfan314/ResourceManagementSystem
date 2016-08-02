@@ -27,6 +27,7 @@
 tr.hide {
 	display:none;
 }
+
 </style>
 </head>
 <body class="easyui-layout">
@@ -68,40 +69,45 @@ tr.hide {
 		buttons="#dlg-buttons">
 		<form id="fm" method="post">
 			<table cellpadding="5">
-				<tr id="idTr">
-					<td>资产标识</td>
+				<tr style="display:none;">
+					<th>资产标识</th>
 					<td><input id="id" name="id" class="easyui-validatebox"
 						readonly></td>
 				</tr>
 				<tr>
-					<td>资产名称</td>
+					<th>资产名称</th>
 					<td><input id="name" name="name" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="modelTr">
-					<td>资产型号</td>
+					<th>资产型号</th>
 					<td><input id="model" name="model" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="trackingNoTr">
-					<td>追踪码</td>
+					<th>追踪码</th>
 					<td><input id="trackingNo" name="trackingNo"
 						class="easyui-validatebox"></td>
 				</tr>
+				<tr id="trackingNo2Tr">
+					<th>对外追踪码</th>
+					<td><input id="trackingNo2" name="trackingNo2"
+						class="easyui-validatebox"></td>
+				</tr>
 				<tr id="imeiTr">
-					<td>IMEI</td>
+					<th>IMEI</th>
 					<td><input id="imei" name="imei" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="serialNoTr">
-					<td>序列号</td>
+					<th>序列号</th>
 					<td><input id="serialNo" name="serialNo"
 						class="easyui-validatebox"></td>
 				</tr>
 				<tr id="phoneNumberTr">
-					<td id="phoneNumberTd">手机号码</td>
+					<th id="phoneNumberTd">手机号码</th>
 					<td><input id="phoneNumber" name="phoneNumber"
 						class="easyui-validatebox"></td>
 				</tr>
 				<tr id="purchaserTr">
-					<td>购买人</td>
+					<th>购买人</th>
 					<td><input id="purchaser" name="purchaser" class="easyui-combobox"
 						data-options="
 				url:'${ctx}/admin/getUsers.do',
@@ -111,22 +117,22 @@ tr.hide {
 				panelHeight:'200px'"></td>
 				</tr>
 				<tr id="imsiTr">
-					<td>IMSI</td>
+					<th>IMSI</th>
 					<td><input id="imsi" name="imsi"
 						class="easyui-validatebox"></td>
 				</tr>
 				<tr id="packTr">
-					<td>套餐信息</td>
+					<th>套餐信息</th>
 					<td><input id="pack" name="pack"
 						class="easyui-validatebox"></td>
 				</tr>
 				<tr id="passwordTr">	
-					<td>密码</td>
+					<th>密码</th>
 					<td><input id="password" name="password"
 						class="easyui-validatebox"></td>
 				</tr>
 				<tr>
-					<td>资产状态</td>
+					<th>资产状态</th>
 					<td><select id="status" name="status" panelHeight="auto"
 						class="easyui-combobox" editable="false">
 							<option value="0">资产正常</option>
@@ -134,11 +140,11 @@ tr.hide {
 							<option value="2">资产被消耗</td>
 				</tr>
 				<tr class="hide">
-					<td>资产类别</td>
+					<th>资产类别</th>
 					<td><input id="type" name="type.id" class="easyui-validatebox"></td>
 				</tr>
 				<tr id="ownerTr1">
-					<td id="ownerTd">资产拥有人</td>
+					<th id="ownerTd">资产拥有人</th>
 					<td><input id="owner" name="owner" class="easyui-combobox"
 						data-options="
 				url:'${ctx}/admin/getUsers.do',
@@ -148,17 +154,20 @@ tr.hide {
 				panelHeight:'200px'"></td>
 				</tr>
 				<tr id="ownerTr2">
-					<td>资产拥有人</td>
-					<td><input id="ownerValidatebox" class="easyui-validatebox"
-						readonly="true"></td>
+					<th>资产拥有人</th>
+					<td><label id="ownerLabel"></label></td>
 				</tr>
-				<tr>
-					<td>入库时间</td>
+				<tr id="entryDateTr1">
+					<th>入库时间</th>
 					<td><input id="entryDate" name="entryDate"
 						class="easyui-validatebox"></td>
 				</tr>
+				<tr id="entryDateTr2">
+					<th>入库时间</th>
+					<td><label id="entryDateLabel"></label></td>
+				</tr>
 				<tr>
-					<td>备注信息</td>
+					<th>备注信息</th>
 					<td><input id="remark" name="remark" class="easyui-textbox"
 						data-options="multiline:true" style="height: 80px;"></td>
 				</tr>
@@ -293,9 +302,10 @@ tr.hide {
 			//设置资产拥有人为仓库
 			$('#owner').combobox('setValue', 'warehouse');
 			//控制组件的显示与隐藏
-			$('#idTr').addClass("hide");
 			$('#ownerTr1').removeClass();
 			$('#ownerTr2').addClass("hide");
+			$('#entryDateTr1').removeClass();
+			$('#entryDateTr2').addClass("hide");
 			//根据类别决定显示的组件
 			componentDisplay();
 			url = "${ctx}/admin/enterNewResource.do";
@@ -305,9 +315,10 @@ tr.hide {
 		function editResource(row) {
 			$('#dlg').dialog('open').dialog('setTitle', '编辑资产信息');
 			//控制组件的显示与隐藏
-			$('#idTr').removeClass();
 			$('#ownerTr1').addClass("hide");
 			$('#ownerTr2').removeClass();
+			$('#entryDateTr1').addClass("hide");
+			$('#entryDateTr2').removeClass();
 			//根据类别决定显示的组件
 			componentDisplay();
 			//设置资产信息的显示
@@ -315,6 +326,7 @@ tr.hide {
 			$('#name').val(row.name);
 			$('#model').val(row.model);
 			$('#trackingNo').val(row.trackingNo);
+			$('#trackingNo2').val(row.trackingNo2);
 			$('#imei').val(row.imei);
 			$('#serialNo').val(row.serialNo);
 			$('#phoneNumber').val(row.phoneNumber);
@@ -325,9 +337,15 @@ tr.hide {
 			$('#status').combobox('setValue', row.status);
 			$('#type').val(type);
 			$('#owner').combobox('setValue', row.owner);
-			$('#ownerValidatebox').val(row.owner);
 			$('#entryDate').val(row.entryDate);
 			$('#remark').textbox('setValue', row.remark);
+			if(row.owner=="warehouse"){
+				$('#ownerLabel').html("仓库");
+			}else{
+				$('#ownerLabel').html(row.owner);
+			}
+			
+			$('#entryDateLabel').html(row.entryDate);
 			url = "${ctx}/admin/editResource.do";
 		}
 
@@ -358,6 +376,7 @@ tr.hide {
 			if(type==<%=ResourceTypeConfig.SIM_CARD%>){
 				$('#modelTr').addClass("hide");
 				$('#trackingNoTr').addClass("hide");
+				$('#trackingNo2Tr').addClass("hide");
 				$('#imeiTr').addClass("hide");
 				$('#serialNoTr').addClass("hide");
 				$('#phoneNumberTr').removeClass();
@@ -372,6 +391,7 @@ tr.hide {
 			else if(type==<%=ResourceTypeConfig.PHONE_CARD%>){
 				$('#modelTr').addClass("hide");
 				$('#trackingNoTr').addClass("hide");
+				$('#trackingNo2Tr').addClass("hide");
 				$('#imeiTr').addClass("hide");
 				$('#serialNoTr').addClass("hide");
 				$('#phoneNumberTr').removeClass();
@@ -386,6 +406,7 @@ tr.hide {
 			else if(fatherType==<%=ResourceTypeConfig.CONSUMABLE%>){
 				$('#modelTr').addClass("hide");
 				$('#trackingNoTr').addClass("hide");
+				$('#trackingNo2Tr').addClass("hide");
 				$('#imeiTr').addClass("hide");
 				$('#serialNoTr').addClass("hide");
 				$('#phoneNumberTr').addClass("hide");
@@ -400,6 +421,7 @@ tr.hide {
 			else{
 				$('#modelTr').removeClass();
 				$('#trackingNoTr').removeClass();
+				$('#trackingNo2Tr').removeClass();
 				$('#imeiTr').removeClass();
 				$('#serialNoTr').removeClass();
 				$('#phoneNumberTr').addClass("hide");
@@ -423,7 +445,6 @@ tr.hide {
 			var second=format(date.getSeconds());
 			var timeStr=year+"/"+month+"/"+day+" "+hour+":"+minute+":"+second;
 			return timeStr;
-			//window.setTimeout("getTime()",1000);
 		}
 		
 		//对日期显示格式化
