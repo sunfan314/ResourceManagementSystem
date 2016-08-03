@@ -81,8 +81,8 @@
 			var ifm= document.getElementById("resourceLogIframe");
 			var subWeb = document.frames ? document.frames["resourceLogIframe"].document:ifm.contentDocument;
 			if(ifm != null && subWeb != null) {
-				//考虑到不同浏览器兼容性问题，在计算出的高度上加10px以免出现滚动条
-				ifm.height = subWeb.body.scrollHeight+10;
+				//考虑到不同浏览器兼容性问题，在计算出的高度上加20px以免出现滚动条
+				ifm.height = subWeb.body.scrollHeight+20;
 			}
 		}
 		
