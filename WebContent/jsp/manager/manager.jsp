@@ -141,6 +141,7 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 		function Open(text, url) {
 			if ($("#tabs").tabs('exists', text)) {
 				$('#tabs').tabs('select', text);
+				UpdateTab(text,url);
 			} else {
 				var content = "<iframe frameborder='0' scrolling='auto' style='width:100%;height:99%' src="
 						+ url + "></iframe>";
@@ -196,6 +197,18 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 			for (var i = 0; i < closeTabsTitle.length; i++) {
 				tabs.tabs("close", closeTabsTitle[i]);
 			}
+		}
+		
+		//更新当前页面
+		function UpdateTab(text,url){
+			var tab = $('#tabs').tabs('getSelected');  // get selected panel
+			$('#tabs').tabs('update', {
+				tab: tab,
+				options: {
+					title: text,
+					href: url  // the new content URL
+				}
+			});
 		}
 	</script>
 

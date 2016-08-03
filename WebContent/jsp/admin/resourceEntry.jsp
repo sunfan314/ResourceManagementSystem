@@ -42,6 +42,7 @@ tr.hide {
 				valueField:'value',
 				textField:'text',
 				groupField:'group',
+				editable:false,
 				panelHeight:'auto',
 				onChange:function(newValue, oldValue){ typeSelected(newValue)}
 			">
@@ -53,22 +54,26 @@ tr.hide {
 	</div>
 
 	<div data-options="region:'center'" title="企业资产列表">
-		<div id="resourceList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 20px;height:85%">
+		<div id="resourceList" style="margin:20px;">
+		
 		</div>
 	</div>
 
 	<div data-options="region:'east'" style="width: 40%" title="资产使用记录">
-		<div id="resourceLogList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
+		<div id="resourceLogList"style="margin:20px;">
+		
 		</div>
 	</div>
 
 	<div id="dlg" class="easyui-dialog"
-		style="width: 350px; height: 500px; padding: 20px" closed="true"
+		style="width: 350px; height: 520px; padding: 20px" closed="true"
 		buttons="#dlg-buttons">
 		<form id="fm" method="post">
 			<table cellpadding="5">
+				<tr>
+					<th>资产类别</th>
+					<td><label id="tName"></label></td>
+				</tr>
 				<tr style="display:none;">
 					<th>资产标识</th>
 					<td><input id="id" name="id" class="easyui-validatebox"
@@ -137,7 +142,9 @@ tr.hide {
 						class="easyui-combobox" editable="false">
 							<option value="0">资产正常</option>
 							<option value="1">资产损坏</option>
-							<option value="2">资产被消耗</td>
+							<option value="2">资产被消耗</option>
+						</select>
+					</td>
 				</tr>
 				<tr class="hide">
 					<th>资产类别</th>
@@ -187,10 +194,6 @@ tr.hide {
 		<form id="type-fm">
 			<table style="border-collapse: separate; border-spacing: 0px 20px;">
 				<tr>
-					<th>类别名称：</th>
-					<td><input id="typeName" class="easyui-validatebox"></td>
-				</tr>
-				<tr>
 					<th>所属类目:</th>
 					<td><input style="height: 30px;" id="fatherType"
 						class="easyui-combobox"
@@ -199,8 +202,13 @@ tr.hide {
 				method:'get',
 				valueField:'id',
 				textField:'name',
+				editable:false,
 				panelHeight:'auto'
 			"></td>
+				</tr>
+				<tr>
+					<th>类别名称：</th>
+					<td><input id="typeName" class="easyui-validatebox"></td>
 				</tr>
 			</table>
 		</form>
@@ -230,6 +238,8 @@ tr.hide {
 		function typeSelected(value) {
 			$('#resourceLogList').hide();
 			type = value;
+			//设置dlg中资产类别提示
+			$('#tName').html($('#resourceType').combobox('getText'));
 			$.post(
 				"${ctx}/resource/getFatherType.do",
 				{
@@ -241,7 +251,8 @@ tr.hide {
 			var resourceList = document.getElementById("resourceList");
 			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
 				+"src='${ctx}/user/getCompanyResources.do?type="+ type
-				+ "' frameborder='no'  style='width:100%;height:100%'>"
+				+ "' frameborder='no'  style='width:100%;' "
+				+"onload='javascript:resourceIframeHeight()'>"
 				+"</iframe>";
 			$('iframe#resourceListIframe').on("load",function(){
 				//为资产列表添加管理资产工具栏
@@ -257,7 +268,7 @@ tr.hide {
 			resourceLogList.innerHTML="<iframe id='resourceLogIframe' name='resourceLogIframe' "
 				+"src='${ctx}/user/getResourceLogs.do?rid="+ rid
 				+ "' frameborder='no'  style='width:100%;'"
-				+"onload='this.height=resourceLogIframe.document.body.scrollHeight'"
+				+"onload='javascript:resourceLogIframeHeight()'"
 				+"></iframe>";
 		}
 		
@@ -430,6 +441,25 @@ tr.hide {
 				$('#packTr').addClass("hide");
 				$('#passwordTr').addClass("hide");
 				$('#ownerTd').html("资产拥有人");
+			}
+		}
+		
+		//iFrame(resourceListIframe)自适应高度
+		function resourceIframeHeight() {
+			var ifm= document.getElementById("resourceListIframe");
+			var subWeb = document.frames ? document.frames["resourceListIframe"].document:ifm.contentDocument;
+			if(ifm != null && subWeb != null) {
+				ifm.height = subWeb.body.scrollHeight;
+			}
+		} 
+		
+		//iFrame(resourceLogIframe)自适应高度
+		function resourceLogIframeHeight(){
+			var ifm= document.getElementById("resourceLogIframe");
+			var subWeb = document.frames ? document.frames["resourceLogIframe"].document:ifm.contentDocument;
+			if(ifm != null && subWeb != null) {
+				//考虑到不同浏览器兼容性问题，在计算出的高度上加10px以免出现滚动条
+				ifm.height = subWeb.body.scrollHeight+10;
 			}
 		}
 		

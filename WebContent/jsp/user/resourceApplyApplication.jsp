@@ -34,6 +34,7 @@
 				valueField:'value',
 				textField:'text',
 				groupField:'group',
+				editable:false,
 				panelHeight:'auto',
 				onChange:function(newValue, oldValue){ typeSelected(newValue)}
 			">
@@ -42,14 +43,14 @@
 	</div>
 
 	<div data-options="region:'center'" title="企业资产列表">
-		<div id="resourceList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 20px;height:85%">
+		<div id="resourceList" style="margin:20px;">
+		 
 		</div>
 	</div>
 
 	<div data-options="region:'east'" style="width: 40%" title="资产使用记录">
-		<div id="resourceLogList"
-			style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
+		<div id="resourceLogList" style="margin:20px;">
+		 
 		</div>
 	</div>
 
@@ -99,7 +100,8 @@
 			var resourceList = document.getElementById("resourceList");
 			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
 					+"src='${ctx}/user/getAvailableResources.do?type="+type
-					+ "' frameborder='no'  style='width:100%;height:100%'>"
+					+ "' frameborder='no'  style='width:100%;'"
+					+"onload='javascript:resourceIframeHeight()'>"
 					+ "</iframe>";
 			$('iframe#resourceListIframe').on("load",function(){
 				//为资产列表添加申请资产工具栏
@@ -115,7 +117,7 @@
 			resourceLogList.innerHTML = "<iframe id='resourceLogIframe' name='resourceLogIframe' "
 					+"src='${ctx}/user/getResourceLogs.do?rid="+rid
 					+ "' frameborder='no'  style='width:100%;'"
-					+ "onload='this.height=resourceLogIframe.document.body.scrollHeight'"
+					+ "onload='javascript:resourceLogIframeHeight()'"
 					+ "></iframe>";
 		}
 		
@@ -145,6 +147,25 @@
 					}
 				}
 			});
+		}
+		
+		//iFrame(resourceListIframe)自适应高度
+		function resourceIframeHeight() {
+			var ifm= document.getElementById("resourceListIframe");
+			var subWeb = document.frames ? document.frames["resourceListIframe"].document:ifm.contentDocument;
+			if(ifm != null && subWeb != null) {
+				ifm.height = subWeb.body.scrollHeight;
+			}
+		} 
+		
+		//iFrame(resourceLogIframe)自适应高度
+		function resourceLogIframeHeight(){
+			var ifm= document.getElementById("resourceLogIframe");
+			var subWeb = document.frames ? document.frames["resourceLogIframe"].document:ifm.contentDocument;
+			if(ifm != null && subWeb != null) {
+				//考虑到不同浏览器兼容性问题，在计算出的高度上加10px以免出现滚动条
+				ifm.height = subWeb.body.scrollHeight+10;
+			}
 		}
 	</script>
 
