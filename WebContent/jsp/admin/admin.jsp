@@ -69,7 +69,12 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 					attributes : {
 						url : "${ctx}/admin/resourceEntry.do"
 					}
-				} ]
+				}, {
+					text : "数据导入导出",
+					attributes : {
+						url : "${ctx}/admin/excelHelper.do"
+					}
+				}]
 			}, {
 				text : "申请审核",
 				children : [ {
