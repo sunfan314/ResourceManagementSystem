@@ -12,6 +12,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +28,10 @@ import net.cn.model.Resource;
 import net.cn.model.Type;
 import net.cn.service.AdminService;
 import net.cn.service.ResourceService;
+import net.cn.service.UserService;
 import net.cn.util.ExcelUtil;
+import net.cn.util.FileUtil;
+import net.cn.util.LDAP;
 import net.cn.util.TimeUtil;
 
 @Controller("excelHelper")
@@ -63,11 +71,36 @@ public class ExcelHelper {
 			file.transferTo(desFile);
 			ExcelUtil excelUtil = new ExcelUtil();
 			Type type = resourceService.getType(typeId);
-			List<Resource> list = excelUtil.readFromFile(filePath + "\\" + desFileName, type);
+			// 从拷贝的excel文件中读取资产数据
+			List<Resource> list = excelUtil.readFromFile(filePath + FileUtil.SEPARATOR + desFileName, type);
+			LDAP ldap = new LDAP();
+			// 获取用户列表
+			List<String> users = ldap.getUsers();
+			// 创建资产插入异常日志
+			List<DataLog> dataLogs = new ArrayList<>();
+			// 插入数据计数
+			int count = 0;
 			for (Resource resource : list) {
-				adminService.addNewResource(resource);
+				//不填写资产拥有人默认新入库资产拥有人为仓库
+				if(resource.getOwner().equals("")){
+					resource.setOwner("warehouse");
+					adminService.addNewResource(resource);
+					count++;
+				}else{
+					//判断用户是否在LDAP服务器中
+					if (users.contains(resource.getOwner())) {
+						adminService.addNewResource(resource);
+						count++;
+					} else {
+						DataLog dataLog = new DataLog(list.indexOf(resource) + 1, resource.getOwner());
+						dataLogs.add(dataLog);
+					}
+				}
 			}
 			map.put("success", true);
+			map.put("successCount", count);
+			map.put("failCount", dataLogs.size());
+			map.put("logs", dataLogs);
 			return map;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -78,6 +111,49 @@ public class ExcelHelper {
 
 	}
 
+	@RequestMapping("/downloadFile")
+	public ResponseEntity<byte[]> downloadFile(@RequestParam(value = "type", required = false) int typeId,
+			HttpSession session){
+		ExcelUtil excelUtil = new ExcelUtil();
+		String filePath = session.getServletContext().getRealPath("/resources/exportExcel");
+		Type type = resourceService.getType(typeId);
+		List<Resource> resources = resourceService.getCompanyResources(typeId);
+		try {
+			File file = excelUtil.exportResource(filePath, type, resources);
+			HttpHeaders headers = new HttpHeaders();
+			String fileName = new String((type.getName()+".xlsx").getBytes("UTF-8"), "iso-8859-1");// 为了解决中文名称乱码问题
+			headers.setContentDispositionFormData("attachment", fileName);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+	
+	/**
+	 * @param session
+	 * @return 数据导入模板下载
+	 */
+	@RequestMapping("/downloadExcelTemplate")
+	public ResponseEntity<byte[]> downloadExcelTemplate(HttpSession session){
+		try {
+			String filePath = session.getServletContext().getRealPath("/resources/excel-template");
+			File file = new File(filePath+FileUtil.SEPARATOR+FileUtil.EXCEL_TEMPLATE_NAME);
+			HttpHeaders headers = new HttpHeaders();
+			String fileName = new String((FileUtil.EXCEL_TEMPLATE_NAME).getBytes("UTF-8"), "iso-8859-1");// 为了解决中文名称乱码问题
+			headers.setContentDispositionFormData("attachment", fileName);
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file), headers, HttpStatus.CREATED);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	/**
 	 * @return 根据当前时间创建excel文件名
 	 */
@@ -86,5 +162,40 @@ public class ExcelHelper {
 		String time = df.format(new Date());
 		return "data" + "_" + time + ".xls";
 	}
+
+	// 异常日志，记录插入数据在excel表中的位置以及错误的用户名
+	class DataLog {
+		private int index;
+
+		private String user;
+
+		public DataLog() {
+			super();
+		}
+
+		public DataLog(int index, String user) {
+			super();
+			this.index = index;
+			this.user = user;
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public void setIndex(int index) {
+			this.index = index;
+		}
+
+		public String getUser() {
+			return user;
+		}
+
+		public void setUser(String user) {
+			this.user = user;
+		}
+
+	}
+	
 
 }

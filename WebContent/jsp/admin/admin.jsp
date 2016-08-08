@@ -43,6 +43,8 @@ article, aside, figure, footer, header, hgroup, menu, nav, section {
 		<div class="easyui-tabs" fit="true" border="false" id="tabs">
 			<div title="首页">
 				<h1 style="font-size: 30px; margin: 40px;">欢迎来到资产管理系统管理员界面</h1>
+				
+				<a href="${ctx}/admin/downloadExcelTemplate.do" style="margin-left:40px;font-size:15px;font-weight:bold;">数据导入模板下载</a>
 			</div>
 
 		</div>

@@ -26,7 +26,7 @@ public interface UserService {
 	 * @return	获取拥有资产的用户列表
 	 */
 	public List<String> getUserWithResources();
-	
+
 	/**
 	 * @return	获取所有用户
 	 */

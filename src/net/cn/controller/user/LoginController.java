@@ -63,30 +63,31 @@ public class LoginController {
 			modelAndView.setViewName("login/login");
 			return modelAndView;
 		}
-//		if(userService.login(uid, password)){
-//			session.setAttribute("uid", uid);
-//			session.setMaxInactiveInterval(60*60*6);
-//			//用户权限验证
-//			int type=userService.getUserAuthority(uid);
-//			if(type==UserGroupConfig.MANAGER){
-//				modelAndView.setViewName("manager/manager");
-//			}else if(type==UserGroupConfig.ADMIN){
-//				modelAndView.setViewName("admin/admin");
-//			}else{
-//				modelAndView.setViewName("user/user");
-//			}
-//		}else{
-//			modelAndView.setViewName("login/fail");
-//		}		
-		session.setAttribute("uid", uid);
-//		session.setMaxInactiveInterval(5);	
-		if(uid.equals("admin")){
-			modelAndView.setViewName("admin/admin");
-		}else if(uid.equals("manager")){
-			modelAndView.setViewName("manager/manager");
+		if(userService.login(uid, password)){
+			session.setAttribute("uid", uid);
+			session.setMaxInactiveInterval(60*60*6);
+			//用户权限验证
+			int type=userService.getUserAuthority(uid);
+			if(type==UserGroupConfig.MANAGER){
+				modelAndView.setViewName("manager/manager");
+			}else if(type==UserGroupConfig.ADMIN){
+				modelAndView.setViewName("admin/admin");
+			}else{
+				modelAndView.setViewName("user/user");
+			}
 		}else{
-			modelAndView.setViewName("user/user");
+			modelAndView.setViewName("login/fail");
 		}	
+		
+//		session.setAttribute("uid", uid);
+//		session.setMaxInactiveInterval(5);	
+//		if(uid.equals("admin")){
+//			modelAndView.setViewName("admin/admin");
+//		}else if(uid.equals("manager")){
+//			modelAndView.setViewName("manager/manager");
+//		}else{
+//			modelAndView.setViewName("user/user");
+//		}	
 		return modelAndView;
 	}
 	
