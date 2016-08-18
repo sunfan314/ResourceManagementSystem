@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="net.cn.util.ResourceStatusConfig" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -107,7 +108,14 @@
 		}
 		
 		//资产归还入库
-		function returnResource(rid) {
+		function returnResource(rid,statusValue) {
+			//资产被消耗
+			if(statusValue=='<%=ResourceStatusConfig.RESOURCE_USED%>'){
+				$('#dialogInfo').text("请求提交失败，被消耗资产无法归还入库！");
+				$('#info-dlg').dialog('open').dialog(
+						'setTitle', '失败');
+				return;
+			}
 			var ui1 = document.getElementById("resourceReceiverLabel");
 			var ui2 = document.getElementById("resourceReceiver");
 			ui1.style.display = "none";
@@ -118,7 +126,13 @@
 		}
 		
 		//资产转移
-		function transferResource(rid) {
+		function transferResource(rid,statusValue) {
+			if(statusValue=='<%=ResourceStatusConfig.RESOURCE_USED%>'){
+				$('#dialogInfo').text("请求提交失败，被消耗资产无法进行转移！");
+				$('#info-dlg').dialog('open').dialog(
+						'setTitle', '失败');
+				return;
+			}
 			var ui1 = document.getElementById("resourceReceiverLabel");
 			var ui2 = document.getElementById("resourceReceiver");
 			ui1.style.display = "";

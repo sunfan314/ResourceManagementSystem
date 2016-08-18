@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ page import="net.cn.util.ResourceStatusConfig" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -122,7 +123,25 @@
 		}
 		
 		//显示资产申请dlg
-		function applyResource(rid) {
+		function applyResource(rid,statusValue) {
+			//资产损坏
+			if(statusValue=='<%=ResourceStatusConfig.RESOURCE_DAMAGED%>'){
+				$('#dialogInfo').text("请求提交失败，资产已损坏！");
+				$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+				return;
+			}
+			//资产被消耗
+			if(statusValue=='<%=ResourceStatusConfig.RESOURCE_USED%>'){
+				$('#dialogInfo').text("请求提交失败，资产被消耗！");
+				$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+				return;
+			}
+			//资产外借
+			if(statusValue=='<%=ResourceStatusConfig.RESOURCE_LENDED%>'){
+				$('#dialogInfo').text("请求提交失败，资产已外借！");
+				$('#info-dlg').dialog('open').dialog('setTitle', '失败');
+				return;
+			}
 			$('#dlg').dialog('open').dialog('setTitle', '在库资产申请');
 			$('#rid').val(rid);
 			url = "${ctx}/user/applyAvailableResource.do";

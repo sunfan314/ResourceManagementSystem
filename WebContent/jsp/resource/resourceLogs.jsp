@@ -37,7 +37,7 @@ td {
 					<th data-options="field:'owner',width:50,formatter:userFormatter">拥有人</th>
 					<th data-options="field:'startTime',width:70">开始时间</th>
 					<th data-options="field:'endTime',width:70">结束时间</th>
-					<th data-options="field:'remark',width:100">备注信息</th>
+					<th data-options="field:'remark',width:100">使用日志</th>
 				</tr>
 			</thead>
 			<tbody>

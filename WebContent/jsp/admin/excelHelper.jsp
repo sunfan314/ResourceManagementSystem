@@ -39,6 +39,10 @@ td.tdStyle {
 				<div style="margin-left: 200px; margin-top: 100px;">
 					<form id="fm" method="post" enctype="multipart/form-data">
 						<table cellspacing="20">
+							<tr colspan="2">
+								<th><a href="${ctx}/admin/downloadExcelTemplate.do" 
+								style="font-size:15px;font-weight:bold;">数据导入模板下载</a></th>
+							</tr>
 							<tr>
 								<th>资产类别选择：</th>
 								<td><input style="height: 30px; width: 100%"

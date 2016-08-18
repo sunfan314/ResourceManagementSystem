@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import net.cn.util.ResourceStatusConfig;
+
 /**
  * @author sunfan314 
  * id 			资产标识 
@@ -162,13 +164,16 @@ public class Resource {
 		String temp="";
 		switch (status) {
 		case 0:
-			temp="资产正常";
+			temp=ResourceStatusConfig.RESOURCE_REGULAR;
 			break;
 		case 1:
-			temp="资产损坏";
+			temp=ResourceStatusConfig.RESOURCE_DAMAGED;
 			break;
 		case 2:
-			temp="资产已消耗";
+			temp=ResourceStatusConfig.RESOURCE_USED;
+			break;
+		case 3:
+			temp=ResourceStatusConfig.RESOURCE_LENDED;
 			break;
 		default:
 			break;

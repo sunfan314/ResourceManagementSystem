@@ -221,6 +221,7 @@ h2 {
 			});
 		});
 		
+		//同意资产分配
 		function acceptApplication() {
 			$.post('${ctx}/admin/dealResourceCallbackApplication.do', {
 				aId : applicationId,
@@ -243,6 +244,7 @@ h2 {
 			}, 'json');
 		}
 
+		//拒绝资产分配
 		function refuseApplication() {
 			$('#dlg').dialog('open').dialog('setTitle', '拒绝资产分配申请');
 		}

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@page import="net.cn.util.ResourceTypeConfig" %>
+<%@ page import="net.cn.util.ResourceStatusConfig" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -140,9 +141,10 @@ tr.hide {
 					<th>资产状态</th>
 					<td><select id="status" name="status" panelHeight="auto"
 						class="easyui-combobox" editable="false">
-							<option value="0">资产正常</option>
-							<option value="1">资产损坏</option>
-							<option value="2">资产被消耗</option>
+							<option value="0"><%=ResourceStatusConfig.RESOURCE_REGULAR %></option>
+							<option value="1"><%=ResourceStatusConfig.RESOURCE_DAMAGED %></option>
+							<option value="2"><%=ResourceStatusConfig.RESOURCE_USED %></option>
+							<option value="3"><%=ResourceStatusConfig.RESOURCE_LENDED %></option>
 						</select>
 					</td>
 				</tr>
@@ -469,7 +471,7 @@ tr.hide {
 			var year=date.getFullYear();
 			//月份的显示范围为0-11
 			var month=format(date.getMonth()+1);		
-			var day=format(date.getDay());
+			var day=format(date.getDate());
 			var hour=format(date.getHours());
 			var minute=format(date.getMinutes());
 			var second=format(date.getSeconds());

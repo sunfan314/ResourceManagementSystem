@@ -111,6 +111,11 @@ public class ExcelHelper {
 
 	}
 
+	/**
+	 * @param typeId
+	 * @param session
+	 * @return	导出资产数据到excel文件
+	 */
 	@RequestMapping("/downloadFile")
 	public ResponseEntity<byte[]> downloadFile(@RequestParam(value = "type", required = false) int typeId,
 			HttpSession session){

@@ -212,7 +212,7 @@ td {
 		function applyResource() {
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
-				parent.applyResource(row.id);
+				parent.applyResource(row.id,row.statusValue);
 			}
 		}
 		//***************资产申请--结束****************************

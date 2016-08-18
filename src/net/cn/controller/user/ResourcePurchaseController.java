@@ -36,6 +36,10 @@ public class ResourcePurchaseController {
 		return modelAndView;
 	}
 	
+	/**
+	 * @param aId
+	 * @return	获取资产购买详情
+	 */
 	@RequestMapping("/getPurchaseApplicationDetailInfo")
 	public @ResponseBody Map<String,Object> getPurchaseApplicationDetailInfo(int aId){
 		Map<String,Object> map=new HashMap<String,Object>();

@@ -185,7 +185,7 @@ td.tdStyle {
 		function returnResource() {
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
-				parent.returnResource(row.id);
+				parent.returnResource(row.id,row.statusValue);
 			}
 		}
 
@@ -193,7 +193,7 @@ td.tdStyle {
 		function transferResource() {
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
-				parent.transferResource(row.id);
+				parent.transferResource(row.id,row.statusValue);
 			}
 		}
 		//****************个人资产管理--结束*************************

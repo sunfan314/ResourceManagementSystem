@@ -25,7 +25,7 @@
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:db.properties</value>
+				<value>classpath:db2.properties</value>
 			</list>
 		</property>
 	</bean>

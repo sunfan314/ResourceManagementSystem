@@ -38,7 +38,7 @@ public class ResourceAllocationController {
 	}
 	
 	/**
-	 * @return	返回通过管理员审核的在库资产分配申请列表
+	 * @return	返回通过经理审核的在库资产分配申请列表
 	 */
 	@RequestMapping("/getResourceAllocationApplications")
 	public @ResponseBody List<Application> getResourceAllocationApplications(){
