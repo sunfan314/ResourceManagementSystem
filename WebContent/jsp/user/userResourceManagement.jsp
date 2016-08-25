@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="net.cn.util.ResourceStatusConfig" %>
+<%@ page import="com.qlove.server.rms.util.ResourceStatusConfig" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -102,7 +102,7 @@
 			var resourceLogList = document.getElementById("resourceLogList");
 			resourceLogList.innerHTML = "<iframe id='resourceLogIframe' name='resourceLogIframe'"
 					+ " src='${ctx}/user/getResourceLogs.do?rid="+ rid
-					+ "' frameborder='no'  style='width:100%;'"
+					+ "' frameborder='no'  style='width:100%;' scrolling='no'"
 					+ "onload='javascript:resourceLogIframeHeight()'"
 					+ "></iframe>";
 		}
@@ -180,7 +180,7 @@
 			var subWeb = document.frames ? document.frames["resourceLogIframe"].document:ifm.contentDocument;
 			if(ifm != null && subWeb != null) {
 				//考虑到不同浏览器兼容性问题，在计算出的高度上加20px以免出现滚动条
-				ifm.height = subWeb.body.scrollHeight+20;
+				ifm.height = subWeb.body.scrollHeight+200;
 			}
 		}
 	</script>

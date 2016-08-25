@@ -216,7 +216,7 @@ h2 {
 					//根据资产类别显示资产详情
 					var resourceInfo=document.getElementById('resourceInfo');
 					resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
-							+row.resource.id+"' frameborder='no'  style='width:100%;' "
+							+row.resource.id+"' frameborder='no'  style='width:100%;'  scrolling='no'"
 							+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
 							+"></iframe>";
 				}

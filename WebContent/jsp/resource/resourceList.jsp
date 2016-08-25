@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="net.cn.util.ResourceTypeConfig"%>
+<%@ page import="com.qlove.server.rms.util.ResourceTypeConfig"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <c:set var="resourceType" value="${type.id}" />
 <c:set var="resourceFatherType" value="${type.fatherType}" />
@@ -71,9 +71,12 @@ td {
 						</c:choose>
 					</th>
 					<th data-options="field:'entryDate',width:50">入库时间</th>
+					<th data-options="field:'consumeDate',width:50">使用时间</th>
 					<th data-options="field:'statusValue',width:40">资产状态</th>
 					<th data-options="field:'remark',width:80">备注信息</th>
 					<th data-options="field:'status',width:80" hidden=true>资产状态</th>
+					<th data-options="field:'resource_apply_bt',width:40,formatter:apply_bt_formatter">申请</th>
+					<th data-options="field:'resource_edit_bt',width:40,formatter:edit_bt_formatter">编辑</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -93,35 +96,33 @@ td {
 						<td>${r.purchaser}</td>
 						<td>${r.owner}</td>
 						<td>${r.entryDate}</td>
+						<td>${r.consumeDate}</td>
 						<td>${r.statusValue}</td>
 						<td>${r.remark}</td>
 						<td>${r.status}</td>
+						<td></td>
+						<td></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
 
-	<div id="applyResourceToolbar" style="display: none">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-return"
-			plain="true" onclick="applyResource()">在库资产申请</a>
-	</div>
-
 	<div id="entryResourceToolbar" style="display: none">
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-			onclick="addResource()">新购资产入库</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-edit" plain="true"
-			onclick="editResource()">编辑资产信息</a>
+			onclick="addResource()">新购资产入库</a> 
 	</div>
 
 	<script type="text/javascript">
 		$(function() {
 			//easyui的datagrid存在数据加载完添加toolbar无法appendRow的问题
 			$('#dg').datagrid({
-				toolbar : '#applyResourceToolbar'
-			});
-			$('#dg').datagrid({
-				toolbar : '#entryResourceToolbar'
+				toolbar : '#entryResourceToolbar',
+				//直接在formatter中设置linkbutton样式无法加载
+				onLoadSuccess:function(data){
+					 $('.apply_bt_style').linkbutton({text:'申请',plain:true,iconCls:'icon-return'}); 
+					 $('.edit_bt_style').linkbutton({text:'编辑',plain:true,iconCls:'icon-edit'}); 
+				}	
 			});
 				
 			//控制不同类别的资产显示的属性字段
@@ -137,6 +138,7 @@ td {
 				$('#dg').datagrid('hideColumn', 'imei');
 				$('#dg').datagrid('hideColumn', 'serialNo');
 				$('#dg').datagrid('hideColumn', 'purchaser');
+				$('#dg').datagrid('hideColumn', 'consumeDate');
 			} else if (type == PHONE_CARD) {
 				$('#dg').datagrid('hideColumn', 'model');
 				$('#dg').datagrid('hideColumn', 'trackingNo');
@@ -157,12 +159,14 @@ td {
 				$('#dg').datagrid('hideColumn', 'imsi');
 				$('#dg').datagrid('hideColumn', 'pack');
 				$('#dg').datagrid('hideColumn', 'password');
+				$('#dg').datagrid('hideColumn', 'consumeDate');
 			} else {
 				$('#dg').datagrid('hideColumn', 'phoneNumber');
 				$('#dg').datagrid('hideColumn', 'imsi');
 				$('#dg').datagrid('hideColumn', 'pack');
 				$('#dg').datagrid('hideColumn', 'password');
 				$('#dg').datagrid('hideColumn', 'purchaser');
+				$('#dg').datagrid('hideColumn', 'consumeDate');
 			}
 			
 			var dataSize="${fn:length(resources)}";
@@ -174,7 +178,7 @@ td {
 				$('#dg').datagrid('mergeCells',{
 					index:0,
 					field:'name',
-					colspan:16
+					colspan:17
 				});
 			}else{
 				//设置双击显示资产使用日志
@@ -196,20 +200,28 @@ td {
 			}
 		}
 		
-		//查看企业资产时隐藏工具栏
+		//查看企业资产时隐藏工具栏和按钮
 		function hideToolbars(){
-			$('#applyResourceToolbar').hide();
 			$('#entryResourceToolbar').hide();
+			$('#dg').datagrid('hideColumn','resource_apply_bt');
+			$('#dg').datagrid('hideColumn','resource_edit_bt');
 		}
 		
 		//***************资产申请--开始****************************
-		//申请资产时隐藏资产入库工具栏
+		//资产申请按钮样式
+		function apply_bt_formatter(value,row,index){
+			return '<a href="#" class="apply_bt_style" onclick="applyResource('+index+')"></a>';
+		}
+		//申请资产时隐藏资产入库工具栏和资产编辑按钮
 		function hideEntryResourceToolbar() {	
 			$('#entryResourceToolbar').hide();
+			$('#dg').datagrid('hideColumn','resource_edit_bt');
 		}
 
 		//父页面创建在库资产申请
-		function applyResource() {
+		function applyResource(index) {
+			//设置选中行为点击按钮所在行
+			$('#dg').datagrid('selectRow',index);
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
 				parent.applyResource(row.id,row.statusValue);
@@ -219,10 +231,15 @@ td {
 		
 		
 		
-		//***************资产入库--开始****************************
-		//入库资产时隐藏资产申请工具栏
+		//***************资产入库和编辑--开始****************************
+		//入库资产时隐藏资产申请按钮
 		function hideApplyResourceToolbar() {
-			$('#applyResourceToolbar').hide();
+			$('#dg').datagrid('hideColumn','resource_apply_bt');
+		}
+		
+		//资产编辑按钮样式
+		function edit_bt_formatter(value,row,index){
+			return '<a href="#" class="edit_bt_style" onclick="editResource('+index+')"></a>';
 		}
 
 		//在父页面创建资产入库dlg
@@ -231,13 +248,15 @@ td {
 		}
 
 		//在父页面创建资产编辑dlg
-		function editResource() {
+		function editResource(index) {
+			//设置选中行为点击按钮所在行
+			$('#dg').datagrid('selectRow',index);
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
 				parent.editResource(row);
 			}
 		}
-		//***************资产入库--结束****************************
+		//***************资产入库和编辑--结束****************************
 	</script>
 </body>
 </html>

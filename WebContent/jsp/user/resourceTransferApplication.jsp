@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="net.cn.util.ResourceTypeConfig" %>
+<%@ page import="com.qlove.server.rms.util.ResourceTypeConfig" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
@@ -213,7 +213,7 @@ h2 {
 				//根据资产类别显示资产详情
 				var resourceInfo=document.getElementById('resourceInfo');
 				resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
-					+row.resource.id+"' frameborder='no'  style='width:100%;' "
+					+row.resource.id+"' frameborder='no'  style='width:100%;'  scrolling='no'"
 					+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
 					+"></iframe>";				
 				

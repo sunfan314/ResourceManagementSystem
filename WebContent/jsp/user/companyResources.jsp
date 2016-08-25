@@ -57,11 +57,11 @@
 			var resourceList = document.getElementById("resourceList");
 			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
 					+"src='${ctx}/user/getCompanyResources.do?type="+ type
-					+ "' frameborder='no'  style='width:100%;'"
+					+ "' frameborder='no'  style='width:100%;' scrolling='no'"
 					+"onload='javascript:resourceIframeHeight()'>"
 					+"</iframe>";
 			$('iframe#resourceListIframe').on("load",function(){
-				//为资产列表添加管理资产工具栏
+				//隐藏工具栏
 				window.frames["resourceListIframe"].hideToolbars();
 			});		
 		}
@@ -72,7 +72,7 @@
 			var resourceLogList=document.getElementById("resourceLogList");
 			resourceLogList.innerHTML="<iframe id='resourceLogIframe' name='resourceLogIframe' "
 				+"src='${ctx}/user/getResourceLogs.do?rid="+ rid
-				+ "' frameborder='no'  style='width:100%;'"
+				+ "' frameborder='no'  style='width:100%;' scrolling='no'"
 				+"onload='javascript:resourceLogIframeHeight()'"
 				+"></iframe>";
 		}

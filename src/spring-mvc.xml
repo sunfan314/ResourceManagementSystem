@@ -18,7 +18,7 @@
 	http://www.springframework.org/schema/task/spring-task-3.0.xsd  ">
 
 	<!-- 使用注解的包，包括子集 -->
-	<context:component-scan base-package="net.cn" />
+	<context:component-scan base-package="com.qlove.server.rms" />
 
 	<!-- 关联数据库properties文件 -->
 	<bean
@@ -60,7 +60,7 @@
 		<!-- 自动扫描注解方式配置的hibernate类文件 -->
 		<property name="packagesToScan">
 			<list>
-				<value>net.cn.model</value>
+				<value>com.qlove.server.rms.model</value>
 			</list>
 		</property>
 	</bean>
@@ -84,7 +84,7 @@
 		</tx:attributes>
 	</tx:advice>
 	<aop:config>
-		<aop:pointcut id="serviceMethods" expression="execution(* net.cn.service.*.*(..))" />
+		<aop:pointcut id="serviceMethods" expression="execution(* com.qlove.server.rms.service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
 	</aop:config>
 
@@ -121,7 +121,7 @@
 
 	<!-- 配置拦截器 -->
 	<mvc:interceptors>
-		<bean class="net.cn.interceptor.UserValidateInterceptor" />
+		<bean class="com.qlove.server.rms.interceptor.UserValidateInterceptor" />
 	</mvc:interceptors>
 	
 	<!-- 支持上传文件 -->  

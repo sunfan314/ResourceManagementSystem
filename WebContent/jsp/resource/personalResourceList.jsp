@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="net.cn.util.ResourceTypeConfig"%>
+<%@ page import="com.qlove.server.rms.util.ResourceTypeConfig"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions"  prefix="fn"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
@@ -63,6 +63,8 @@ td.tdStyle {
 					<th data-options="field:'pack',hidden:true">套餐信息</th>
 					<th data-options="field:'password',hidden:true">密码</th>
 					<th data-options="field:'owner',hidden:true">资产拥有人</th>
+					<th data-options="field:'resource_return_bt',width:40,formatter:return_bt_formatter">归还</th>
+					<th data-options="field:'resource_transfer_bt',width:40,formatter:transfer_bt_formatter">转移</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -86,17 +88,12 @@ td.tdStyle {
 						<td>${r.pack}</td>
 						<td>${r.password}</td>
 						<td>${r.owner}</td>
+						<td></td>
+						<td></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
-	</div>
-	
-	<div id="manageResourceToolbar" style="display:none">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-return"
-			plain="true" onclick="returnResource()">资产归还</a> <a href="#"
-			class="easyui-linkbutton" iconCls="icon-transfer" plain="true"
-			onclick="transferResource()">资产转移</a>
 	</div>
 
 	<script type="text/javascript">
@@ -120,7 +117,6 @@ td.tdStyle {
 		//初始化数据表
 		function initDatagrid(){
 			$('#dg').datagrid({
-				toolbar:'#manageResourceToolbar',
 				view : detailview,
 				detailFormatter : function(index, row) {
 					//SIM卡
@@ -168,21 +164,39 @@ td.tdStyle {
 				//设置双击显示资产使用日志
 				onDblClickRow : function(index, row) {
 					parent.showResourceLogList(row.id);
-				}		
+				},
+				//加载按钮样式（直接在formatter中无法加载linkbutton样式）
+				onLoadSuccess:function(data){
+					$('.return_bt_style').linkbutton({text:'归还',plain:true,iconCls:'icon-return'});
+					$('.transfer_bt_style').linkbutton({text:'转移',plain:true,iconCls:'icon-transfer'});
+				}
 			});	
 		}
 		
 		//****************职员资产查看--开始*************************
-		//隐藏工具栏
+		//隐藏工具栏按钮
 		function hideToolbar() {
-			$('#manageResourceToolbar').hide();
+			$('#dg').datagrid('hideColumn','resource_return_bt');
+			$('#dg').datagrid('hideColumn','resource_transfer_bt');
 		}
 		//****************职员资产查看--结束*************************
 
 		
 		//****************个人资产管理--开始*************************
+		//资产归还按钮样式
+		function return_bt_formatter(value,row,index){
+			return '<a href="#" class="return_bt_style" onclick="returnResource('+index+')"></a>';
+		}
+		
+		//资产转移按钮样式
+		function transfer_bt_formatter(value,row,index){
+			return '<a href="#" class="transfer_bt_style" onclick="transferResource('+index+')"></a>';
+		}
+		
 		//资产归还
-		function returnResource() {
+		function returnResource(index) {
+			//设置选中行为点击按钮所在行
+			$('#dg').datagrid('selectRow',index);
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
 				parent.returnResource(row.id,row.statusValue);
@@ -190,7 +204,9 @@ td.tdStyle {
 		}
 
 		//资产转移
-		function transferResource() {
+		function transferResource(index) {
+			//设置选中行为点击按钮所在行
+			$('#dg').datagrid('selectRow',index);
 			var row = $('#dg').datagrid('getSelected');
 			if (row) {
 				parent.transferResource(row.id,row.statusValue);

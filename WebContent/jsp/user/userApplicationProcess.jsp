@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="net.cn.util.ApplicationTypeConfig" %>
+<%@ page import="com.qlove.server.rms.util.ApplicationTypeConfig" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -302,7 +302,7 @@ td.tdStyle {
 						//显示资产详情
 						var resourceInfo=document.getElementById("resourceInfo");
 						resourceInfo.innerHTML="<iframe name='resourceInfoIframe' src='${ctx}/resource/resourceInfo.do?rid="
-							+r.id+"' frameborder='no'  style='width:100%;' "
+							+r.id+"' frameborder='no'  style='width:100%;' scrolling='no'"
 							+"onload='this.height=resourceInfoIframe.document.body.scrollHeight' "
 							+"></iframe>";
 						

@@ -71,7 +71,7 @@
 			var resourceLogList = document.getElementById("resourceLogList");
 			resourceLogList.innerHTML = "<iframe id='resourceLogIframe' name='resourceLogIframe'"
 					+ " src='${ctx}/user/getResourceLogs.do?rid="+ rid
-					+ "' frameborder='no'  style='width:100%;'"
+					+ "' frameborder='no'  style='width:100%;' scrolling='no'"
 					+ "onload='javascript:resourceLogIframeHeight()'"
 					+ "></iframe>";
 		}

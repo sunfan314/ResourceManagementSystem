@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page import="net.cn.util.ResourceStatusConfig" %>
+<%@ page import="com.qlove.server.rms.util.ResourceStatusConfig" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -101,7 +101,7 @@
 			var resourceList = document.getElementById("resourceList");
 			resourceList.innerHTML = "<iframe id='resourceListIframe' name='resourceListIframe' "
 					+"src='${ctx}/user/getAvailableResources.do?type="+type
-					+ "' frameborder='no'  style='width:100%;'"
+					+ "' frameborder='no'  style='width:100%;' scrolling='no'"
 					+"onload='javascript:resourceIframeHeight()'>"
 					+ "</iframe>";
 			$('iframe#resourceListIframe').on("load",function(){
@@ -117,7 +117,7 @@
 			var resourceLogList = document.getElementById("resourceLogList");
 			resourceLogList.innerHTML = "<iframe id='resourceLogIframe' name='resourceLogIframe' "
 					+"src='${ctx}/user/getResourceLogs.do?rid="+rid
-					+ "' frameborder='no'  style='width:100%;'"
+					+ "' frameborder='no'  style='width:100%;' scrolling='no'"
 					+ "onload='javascript:resourceLogIframeHeight()'"
 					+ "></iframe>";
 		}

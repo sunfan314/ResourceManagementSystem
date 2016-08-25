@@ -25,34 +25,36 @@
 <style type="text/css">
 .myBackground {
 	background:
-		url("${pageContext.request.contextPath}/resource/pic/background.jpg")
+		url("${ctx}/resources/pic/background.png")
 		no-repeat;
-	background-position: 50px 50px;
+	background-position: 250px 150px;
 }
 
 .myInstitute {
 	background:
-		url("${pageContext.request.contextPath}/resource/pic/institute.jpg")
+		url("${pageContext.request.contextPath}/resources/pic/institute.png")
 		no-repeat;
+	background-position: 75px 12px;
 }
 
 .myBackgroundColor {
-	background-color: #F5F5F5;
+	background-color: #050505;
 }
 </style>
 
 </head>
 <body class="easyui-layout">
-	<div data-options="region:'north',split:false" style="height: 100px"
-		class="myInstitute myBackgroundColor"></div>
+	<div data-options="region:'north',split:false" style="height: 70px;overflow:hidden" 
+		class="myInstitute myBackgroundColor">
+		<h2 style="font-size:30px;color:white;font-weight:bold;margin-left:100px;margin-top:5px;">数字家圆资产管理系统</h2>
+	</div>
 	<div data-options="region:'center',split:false" style="width: 800px"
 		class="myBackground">
-		<div style="margin-top: 30px; margin-left: 250px;">
-			<h2 style="font-size: 40px; color: grey;">资产管理系统</h2>
-			<h4
-				style="font-size: 15px; color: grey; margin-left: 100px; margin-top: 30px;">——数字家圆科技有限公司</h4>
+		<div style="margin-top: 30px; margin-left: 500px;margin-top:100px;">
+			<h2 style="font-size: 60px; color: grey;">亲相见</h2>
+			<h2 style="font-size: 60px; color: grey;margin-left:100px;">爱有心</h2>
 		</div>
-		<div style="margin-top: -10px; margin-left: 800px;">
+		<div style="margin-top: 80px; margin-left: 1200px;">
 			<form action="${ctx}/user/userLogin.do" method="post"
 				style="border-left: #CCC 2px solid">
 				<div style="margin: 20px; margin-left: 50px;">
